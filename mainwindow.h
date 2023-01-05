@@ -47,6 +47,12 @@ private slots:
 
     void on_checkBox_5_stateChanged(int arg1);
 
+    void on_pushButton_5_clicked();
+
+    void on_checkBox_6_stateChanged(int arg1);
+
+    void on_horizontalSlider_2_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     processlist* sub1;

@@ -3,5 +3,7 @@
         <file>picture/boji.png</file>
         <file>picture/hongxia.png</file>
         <file>gif/sakana1.gif</file>
+        <file>gif/ailini_1.gif</file>
+        <file>gif/pngs2gif.gif</file>
     </qresource>
 </RCC>

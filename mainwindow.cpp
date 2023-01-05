@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     sub1 = new processlist;
     sub2 = new wininfo;
     sub_show = new character;
+    sub_show->setWindowFlag(Qt::Tool);
     ui->stackedWidget->addWidget(sub1);
     ui->stackedWidget->addWidget(sub2);
     ui->stackedWidget->setCurrentWidget(sub1);
@@ -23,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     //-----
     ui->horizontalSlider->setRange(0,100);
     ui->horizontalSlider->setValue(50);
+
+    ui->horizontalSlider_2->setRange(50,100);
+    ui->horizontalSlider_2->setValue(100);
 
 }
 
@@ -73,10 +77,12 @@ void MainWindow::TrayIconFlash(){
     else{
         mSysTrayIcon->setIcon(icon2);
     }
-
     Iconflash = !Iconflash;
+
     ui->label->setText("hadf"+QString::number(Iconflash));
-    //sub_show->Automove();
+
+    ui->label_4->setText( QString::number(sub_show->pos().x())+","+
+                          QString::number(sub_show->pos().y()) );
 }
 void MainWindow::on_pushButton_2_clicked()
 {
@@ -162,10 +168,10 @@ void MainWindow::on_checkBox_2_stateChanged(int arg1)
 {
     //半透明
     if(arg1){
-        sub_show->change_state(3);
+        ui->horizontalSlider->setEnabled(false);
     }
     else{
-        sub_show->change_state(2);
+        ui->horizontalSlider->setEnabled(true);
     }
 }
 
@@ -190,13 +196,16 @@ void MainWindow::on_checkBox_5_stateChanged(int arg1)
         if(ui->checkBox_3->isChecked()){
             ui->checkBox_3->setChecked(false);
         }
-        SetWindowPos(sub_show->thisWinId,HWND_BOTTOM,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+//        HWND desktopHwnd = findDesktopIconWnd();
+//        if(desktopHwnd){
 
+//        }
+        //SetWindowPos(sub_show->thisWinId,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+        SetWindowPos(sub_show->thisWinId,HWND_BOTTOM,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
     else{
+
         SetWindowPos(sub_show->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
-
-
     }
 }
 
@@ -206,6 +215,44 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     ui->label_3->setText(QString::number(value));
     sub_show->change_transparent(value);
+}
+void MainWindow::on_checkBox_6_stateChanged(int arg1)
+{
+    if(arg1){
+        ui->horizontalSlider_2->setEnabled(false);
+    }
+    else{
+        ui->horizontalSlider_2->setEnabled(true);
+    }
+}
+void MainWindow::on_horizontalSlider_2_valueChanged(int value)
+{
+    ui->label_6->setText(QString::number(value));
+    sub_show->change_size(value);
+}
+BOOL enumUserWindowsCB(HWND hwnd,LPARAM lParam)
+{
+    long wflags = GetWindowLong(hwnd, GWL_STYLE);
+    if(!(wflags & WS_VISIBLE)) return TRUE;
+    HWND sndWnd;
+    if( !(sndWnd=FindWindowEx(hwnd, NULL, L"SHELLDLL_DefView", NULL)) ) return TRUE;
+    HWND targetWnd;
+    if( !(targetWnd=FindWindowEx(sndWnd, NULL, L"SysListView32", L"FolderView")) ) return TRUE;
+    HWND* resultHwnd = (HWND*)lParam;
+    *resultHwnd = targetWnd;
+    return FALSE;
+}
+
+HWND findDesktopIconWnd(){
+    HWND resultHwnd = NULL;
+    EnumWindows((WNDENUMPROC)enumUserWindowsCB, (LPARAM)&resultHwnd);
+    return resultHwnd;
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    sub_show->move(0,300);
+
 }
 
 

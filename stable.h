@@ -9,5 +9,8 @@
 #include <QDebug>
 #include <winuser.h>
 #include <QMouseEvent>
+#include <QMediaPlayer>
+#include <QVideoWidget>
+
 
 #endif // STABLE_H

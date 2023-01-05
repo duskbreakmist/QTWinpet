@@ -7,12 +7,27 @@ character::character(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    action act_interact("E:/File/BlenderWorkPlace/blender3.4/ailini_all/outpng2");
-    action act_walk("E:/File/BlenderWorkPlace/blender3.4/ailini_all/outpng2");
-    actions[0] = act_interact;
-    actions[1] = act_walk;
-    setAction(&actions[0]);
+    //action act_interact("E:/File/BlenderWorkPlace/blender3.4/ailini_all/outpng2");
+    action act_interact("E:/File/SpineWorkPlace/outputPNG/白面鸮/interact");
+    action act_Rwalk("E:/File/SpineWorkPlace/outputPNG/白面鸮/MoveR");
+    action act_relax("E:/File/SpineWorkPlace/outputPNG/白面鸮/relax");
+    action act_sleep("E:/File/SpineWorkPlace/outputPNG/白面鸮/sleep");
+    //上面都是临时变量，需要下面去储存。
+    actions[0] = act_relax;
+    actions[1] = act_Rwalk;
+    actions[2] = act_interact;
+    actions[3] = act_sleep;
 
+    actions[1].nextaction = &actions[0];
+    actions[1].Ifloop = false;
+    actions[1].setMovexy(2,0);
+    actions[0].nextaction = &actions[1];
+    actions[0].Ifloop = false;
+    actions[2].Ifloop = false;
+    actions[2].nextaction = &actions[0];
+    setAction(&actions[1]);
+
+    this->resize(nowaction->ImgSize);
 
     thisWinId = (HWND)winId();
     setAttribute(Qt::WA_TranslucentBackground);
@@ -29,18 +44,24 @@ character::~character()
 {
     delete ui;
 }
-void character::setAction(action* act){
-
-    this->resize(act->ImgSize);
+void character::setAction(action* act){ 
+    AutoRisize(NowScale*act->ImgSize);
     nowaction = act;
+}
+void character::AutoRisize(QSize NewSize){
+    resize(NewSize);
+    move(
+                pos().rx()+(NowSize.rwidth() - NewSize.rwidth())/2,
+                pos().ry()+NowSize.rheight() - NewSize.rheight());
+    NowSize = NewSize;
 }
 void character::change_transparent(int i){
     setWindowOpacity(i/100.0);
 }
 void character::change_size(int i){
     NowScale = i/100.0;
-    NowSize = NowScale*nowaction->ImgSize;
-    resize(NowSize);
+    AutoRisize(NowScale*nowaction->ImgSize);
+    //resize(NowSize);
 }
 void character::change_state(int i){
     switch (i) {
@@ -60,7 +81,6 @@ void character::change_state(int i){
 void character::Automove(){
 
     update();//更新图片序列
-
     move(nowaction->MoveWidget(pos()));//更新窗口位置。
 
 }
@@ -76,6 +96,9 @@ void character::mouseMoveEvent(QMouseEvent* event){
 void character::mousePressEvent(QMouseEvent* event){
     mouse_clicked_flag = true;
     screenPos = event->globalPosition().toPoint();
+
+    nowaction->returnNext();
+    setAction(&actions[2]);
 }
 void character::mouseReleaseEvent(QMouseEvent* event){
     Q_UNUSED(event);
@@ -86,4 +109,7 @@ void character::paintEvent(QPaintEvent* event){
     QPainter p(this);
     p.scale(NowScale,NowScale);
     nowaction->Paint(p);
+    if(nowaction->Ifend){
+        setAction(nowaction->returnNext());
+    }
 }

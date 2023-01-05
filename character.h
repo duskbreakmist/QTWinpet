@@ -20,10 +20,14 @@ public:
     void change_state(int i);
     void change_transparent(int i);
     void change_size(int i);
+
+    void AutoRisize(QSize NewSize);//同时保证图片下边中点不变。
+    QSize NowSize;//配合上面的函数使用
+    double NowScale;//配合上面
+
     void setAction(action* act);
-    QPoint screenPos;
-    QSize NowSize;
-    double NowScale;
+    QPoint screenPos;//鼠标点击的全局坐标
+
     HWND thisWinId;
 
 private slots:

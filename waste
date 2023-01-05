@@ -1,0 +1,22 @@
+//    QMediaPlayer* player = new QMediaPlayer(this);
+//    QVideoWidget* playerWidget = new QVideoWidget;
+
+//    player->setSource((QUrl)("qrc:/new/prefix1/video/ailini_1.mp4"));
+//    player->setVideoOutput(playerWidget);
+//    playerWidget->show();
+//    player->setLoops(-1);
+//    //qDebug()<<player->MediaStatus;
+//    player->play();
+
+//    QMovie *movie =  new QMovie(":/new/prefix1/gif/sakana1.gif");
+//    QMovie *movie2 = new QMovie("E:/File/C++File/QT/taskmanager/gif/1.gif");
+//    //QMovie *movie2 = new QMovie(":/new/prefix1/gif/pngs2gif.gif");
+//    //QMovie *movie2 = new QMovie(":/new/prefix1/video/ailini_1.mp4");
+//    //QMovie 不能播放mp4视频
+//    movie->setScaledSize(QSize(400,200));
+//    movie2->setScaledSize(QSize(100,100));
+//    movie2->start();
+//    ui->label->setMovie(movie2);
+
+//qDebug()<<"action"<<actions.setImgDir("E:/File/BlenderWorkPlace/blender3.4/ailini_all/outpng2");
+//qDebug()<<actions.Ifend;

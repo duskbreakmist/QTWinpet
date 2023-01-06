@@ -11,6 +11,6 @@
 #include <QMouseEvent>
 #include <QMediaPlayer>
 #include <QVideoWidget>
-
-
+#include <QSoundEffect>
+//#include <QtGlobal>
 #endif // STABLE_H

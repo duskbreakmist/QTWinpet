@@ -37,13 +37,15 @@ public:
     action* returnNext();
     void reset(){Ifend = false;nowIndex=0;}
     //图像显示和移动部分
-    bool Paint(QPainter& p);
+    bool Paint(QPainter& p,QPoint ScreenStable,double Scale=1,bool IfRLturn=false);
     int MoveMode;
-    int Movex;
-    int Movey;
+    QPoint Movexy;
+
+    QPoint StableP;//想要让图片上的哪个点保持全局不变
     //0 = 静止
     //1 = 正向;-1 反向
-    QPoint MoveWidget(QPoint nowp);
+    QPoint Show_LUp;//左上角
+    QPoint MoveWidget(QPoint nowp,bool IfRLTurn=false);
 };
 
 #endif // ACTION_H

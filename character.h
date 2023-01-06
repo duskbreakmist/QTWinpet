@@ -5,7 +5,8 @@
 #include <QMovie>
 #include "action.h"
 #include <stable.h>
-
+#define SCREENwidth 250
+#define SCREENheight 250
 namespace Ui {
 class character;
 }
@@ -22,8 +23,9 @@ public:
     void change_size(int i);
 
     void AutoRisize(QSize NewSize);//同时保证图片下边中点不变。
-    QSize NowSize;//配合上面的函数使用
+    QSize NowSize;//配合上面的函数使用//现在的显示图片大小//窗口大小不变了
     double NowScale;//配合上面
+    QPoint StableP;//
 
     void setAction(action* act);
     QPoint screenPos;//鼠标点击的全局坐标
@@ -36,10 +38,13 @@ private:
     Ui::character *ui;
 
     bool mouse_clicked_flag;
-
+    bool IfRLTurn;//true== walk left
     QTimer * mTimer;
     action actions[10];
     action* nowaction;
+
+    //QMediaPlayer *player;
+    QSoundEffect* soundeffect;
     QString nowImgDir;
 protected:
     void mouseMoveEvent(QMouseEvent* event);

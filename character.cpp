@@ -18,6 +18,9 @@ character::character(QWidget *parent) :
     actions[2] = act_interact;
     actions[3] = act_sleep;
 
+    actions[0].StableP.setY(actions[0].StableP.y()-1);
+    actions[1].StableP.setY(actions[1].StableP.y()-3);
+    actions[3].StableP.setY(actions[3].StableP.y()-6);
     actions[1].nextaction = &actions[0];
     actions[1].Ifloop = false;
     actions[1].setMovexy(2,0);
@@ -25,10 +28,13 @@ character::character(QWidget *parent) :
     actions[0].Ifloop = false;
     actions[2].Ifloop = false;
     actions[2].nextaction = &actions[0];
+
+
     setAction(&actions[1]);
+    IfRLTurn = true;
 
-    this->resize(nowaction->ImgSize);
-
+    resize(SCREENwidth,SCREENheight);//不再改变
+    StableP = QPoint(SCREENwidth/2,SCREENheight);
     thisWinId = (HWND)winId();
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlag(Qt::FramelessWindowHint);
@@ -38,6 +44,12 @@ character::character(QWidget *parent) :
     mTimer = new QTimer(this);
     mTimer->start(40);
     connect(mTimer,SIGNAL(timeout()),this,SLOT(Automove()));
+
+    soundeffect = new QSoundEffect;
+    soundeffect->setVolume(0.5);
+    soundeffect->setSource(QUrl::fromLocalFile("E:/File/C++File/QT/taskmanager/sound/click.wav"));
+    //player->setSource();
+
 }
 
 character::~character()
@@ -49,10 +61,7 @@ void character::setAction(action* act){
     nowaction = act;
 }
 void character::AutoRisize(QSize NewSize){
-    resize(NewSize);
-    move(
-                pos().rx()+(NowSize.rwidth() - NewSize.rwidth())/2,
-                pos().ry()+NowSize.rheight() - NewSize.rheight());
+
     NowSize = NewSize;
 }
 void character::change_transparent(int i){
@@ -81,7 +90,7 @@ void character::change_state(int i){
 void character::Automove(){
 
     update();//更新图片序列
-    move(nowaction->MoveWidget(pos()));//更新窗口位置。
+    move(nowaction->MoveWidget(pos(),IfRLTurn));//更新窗口位置。
 
 }
 
@@ -94,11 +103,15 @@ void character::mouseMoveEvent(QMouseEvent* event){
 
 }
 void character::mousePressEvent(QMouseEvent* event){
+
     mouse_clicked_flag = true;
     screenPos = event->globalPosition().toPoint();
+    if(event->button()==Qt::RightButton){
+        nowaction->returnNext();
+        setAction(&actions[2]);
+        soundeffect->play();
+    }
 
-    nowaction->returnNext();
-    setAction(&actions[2]);
 }
 void character::mouseReleaseEvent(QMouseEvent* event){
     Q_UNUSED(event);
@@ -107,9 +120,12 @@ void character::mouseReleaseEvent(QMouseEvent* event){
 void character::paintEvent(QPaintEvent* event){
     Q_UNUSED(event);
     QPainter p(this);
-    p.scale(NowScale,NowScale);
-    nowaction->Paint(p);
+
+    nowaction->Paint(p,StableP,NowScale,IfRLTurn);
     if(nowaction->Ifend){
+        if(rand()/(RAND_MAX*1.0)>0.5){
+            IfRLTurn = !IfRLTurn;
+        }
         setAction(nowaction->returnNext());
     }
 }

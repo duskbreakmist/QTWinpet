@@ -25,8 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->horizontalSlider->setRange(0,100);
     ui->horizontalSlider->setValue(79);
 
-    ui->horizontalSlider_2->setRange(50,100);
+    ui->horizontalSlider_2->setRange(10,100);
     ui->horizontalSlider_2->setValue(58);
+    ui->checkBox_3->setChecked(true);
 
 }
 
@@ -251,7 +252,7 @@ HWND findDesktopIconWnd(){
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    sub_show->move(0,710);
+    sub_show->move(0,574);
 }
 
 

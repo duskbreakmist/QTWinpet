@@ -17,13 +17,14 @@ action::action(QString dir)
 
     IfChangeSize = false;
     MoveMode = 0;
-    Movex = 0;
-    Movey = 0;
+    Movexy = QPoint(0,0);
+
+
     setImgDir(dir);
 }
 bool action::setMovexy(int x,int y){
-    Movex = x;
-    Movey = y;
+    Movexy.setX(x);
+    Movexy.setY(y);
     return true;
 }
 bool action::setImgDir(QString dir){
@@ -48,18 +49,36 @@ bool action::setImgDir(QString dir){
             }
             ImgNum = ImgList.size();
             ImgSize = QImage(ImgList.first()).size();
+            StableP = QPoint(ImgSize.rwidth()/2,ImgSize.rheight());
         }
         return true;
     }
 }
-bool action::Paint(QPainter& p){
+bool action::Paint(QPainter& p,QPoint ScreenStable,double Scale,bool IfRLturn){
+
+    ShowSize = Scale* ImgSize;
+    Show_LUp =ScreenStable-StableP*Scale;
+
     if(nowIndex<ImgNum){
-        if(IfChangeSize){
+        if(IfChangeSize&&false){
             NowImg = QImage(ImgList[nowIndex]).scaled(ShowSize);
             p.drawImage(QPointF(0,0),NowImg);
         }
         else{
-            p.drawImage(QPointF(0,0),QImage(ImgList[nowIndex]));
+            if(IfRLturn){
+                //p.drawRect(QRectF(Show_LUp,ShowSize));
+                //p.drawImage(,)
+                p.drawImage(QRectF(Show_LUp,ShowSize),
+                            QImage(ImgList[nowIndex]).mirrored(true,false)
+                            );
+            }
+            else{
+                //p.drawRect(QRectF(Show_LUp,ShowSize));
+                //p.drawImage(,)
+                p.drawImage(QRectF(Show_LUp,ShowSize),
+                            QImage(ImgList[nowIndex])
+                            );
+            }
         }
         nowIndex++;
     }
@@ -72,12 +91,18 @@ bool action::Paint(QPainter& p){
     }
     return true;
 }
-QPoint action::MoveWidget(QPoint nowp){
-
-    nowp.setX(nowp.x()+Movex);
-    nowp.setY(nowp.y()+Movey);
+QPoint action::MoveWidget(QPoint nowp,bool IfRLTurn){
+    if(IfRLTurn){
+        nowp.setX(nowp.x()-Movexy.x());
+        nowp.setY(nowp.y()+Movexy.y());
+    }else{
+        nowp += Movexy;
+    }
     if(nowp.x()>1520){
-        nowp.setX(0);
+        nowp.setX(-ImgSize.width());
+    }
+    if(nowp.x()<0){
+        nowp.setX(1520);
     }
     if(nowp.y()>1080){
         nowp.setY(0);

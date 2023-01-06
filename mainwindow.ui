@@ -262,8 +262,8 @@
          <rect>
           <x>230</x>
           <y>40</y>
-          <width>131</width>
-          <height>151</height>
+          <width>141</width>
+          <height>191</height>
          </rect>
         </property>
         <property name="title">
@@ -274,7 +274,7 @@
           <rect>
            <x>20</x>
            <y>20</y>
-           <width>118</width>
+           <width>71</width>
            <height>24</height>
           </rect>
          </property>
@@ -282,7 +282,7 @@
           <string>静止</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
         <widget class="QRadioButton" name="radioButton_2">
@@ -290,12 +290,15 @@
           <rect>
            <x>20</x>
            <y>40</y>
-           <width>118</width>
+           <width>91</width>
            <height>24</height>
           </rect>
          </property>
          <property name="text">
           <string>随机运动</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
         <widget class="QRadioButton" name="radioButton_3">
@@ -303,7 +306,7 @@
           <rect>
            <x>20</x>
            <y>60</y>
-           <width>118</width>
+           <width>91</width>
            <height>24</height>
           </rect>
          </property>
@@ -314,14 +317,14 @@
         <widget class="QLabel" name="label_4">
          <property name="geometry">
           <rect>
-           <x>10</x>
+           <x>80</x>
            <y>130</y>
            <width>61</width>
            <height>20</height>
           </rect>
          </property>
          <property name="text">
-          <string>现在位置</string>
+          <string>x,y</string>
          </property>
         </widget>
         <widget class="QPushButton" name="pushButton_5">
@@ -335,6 +338,45 @@
          </property>
          <property name="text">
           <string>复位</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_7">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>150</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>现在动作</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_8">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>130</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>现在位置</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_9">
+         <property name="geometry">
+          <rect>
+           <x>80</x>
+           <y>150</y>
+           <width>61</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>action</string>
          </property>
         </widget>
        </widget>

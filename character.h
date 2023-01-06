@@ -25,23 +25,36 @@ public:
     void AutoRisize(QSize NewSize);//同时保证图片下边中点不变。
     QSize NowSize;//配合上面的函数使用//现在的显示图片大小//窗口大小不变了
     double NowScale;//配合上面
-    QPoint StableP;//
+    QPoint StableP;//配合上面
 
     void setAction(action* act);
+    void setActionMode(int i);
     QPoint screenPos;//鼠标点击的全局坐标
 
     HWND thisWinId;
+    //物理部分
+
+    QPointF m_v;
+    QPointF m_g;
+    QPointF m_p;
+    int ground_y;
+    bool IfFloat;
+    bool IfPhy;
 
 private slots:
     void Automove();
+    void AutoPicUpdate();
 private:
     Ui::character *ui;
 
     bool mouse_clicked_flag;
     bool IfRLTurn;//true== walk left
-    QTimer * mTimer;
+    QTimer * mTimer_pos;
+    QTimer * mTimer_pic;
+
     action actions[10];
     action* nowaction;
+    int ActionMode;
 
     //QMediaPlayer *player;
     QSoundEffect* soundeffect;

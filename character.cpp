@@ -32,6 +32,11 @@ character::character(QWidget *parent) :
 
     setAction(&actions[1]);
     IfRLTurn = true;
+    IfFloat = false;
+    IfPhy = true;
+    m_g = QPoint(0,1);
+    ground_y = 574;
+    ActionMode = 1;
 
     resize(SCREENwidth,SCREENheight);//不再改变
     StableP = QPoint(SCREENwidth/2,SCREENheight);
@@ -41,9 +46,12 @@ character::character(QWidget *parent) :
 
     show();
 
-    mTimer = new QTimer(this);
-    mTimer->start(40);
-    connect(mTimer,SIGNAL(timeout()),this,SLOT(Automove()));
+    mTimer_pic = new QTimer(this);
+    mTimer_pic->start(40);
+    connect(mTimer_pic,SIGNAL(timeout()),this,SLOT(AutoPicUpdate()));
+    mTimer_pos = new QTimer(this);
+    mTimer_pos->start(20);
+    connect(mTimer_pos,SIGNAL(timeout()),this,SLOT(Automove()));
 
     soundeffect = new QSoundEffect;
     soundeffect->setVolume(0.5);
@@ -59,6 +67,9 @@ character::~character()
 void character::setAction(action* act){ 
     AutoRisize(NowScale*act->ImgSize);
     nowaction = act;
+}
+void character::setActionMode(int i){
+    ActionMode = i;
 }
 void character::AutoRisize(QSize NewSize){
 
@@ -87,11 +98,28 @@ void character::change_state(int i){
     }
 
 }
-void character::Automove(){
-
+void character::AutoPicUpdate(){
     update();//更新图片序列
-    move(nowaction->MoveWidget(pos(),IfRLTurn));//更新窗口位置。
-
+}
+void character::Automove(){
+    if(IfPhy){
+        if(IfFloat){
+            m_p += m_v;
+            m_v += m_g;
+            if(m_p.y()>= ground_y){
+                m_v = QPoint(0,0);
+                m_p.setY(ground_y);
+                IfFloat = false;
+            }
+            move(m_p.toPoint());
+        }
+        else{
+            move(nowaction->MoveWidget(pos(),IfRLTurn));//更新窗口位置。
+        }
+    }
+    else{
+        move(nowaction->MoveWidget(pos(),IfRLTurn));//更新窗口位置。
+    }
 }
 
 void character::mouseMoveEvent(QMouseEvent* event){
@@ -99,12 +127,16 @@ void character::mouseMoveEvent(QMouseEvent* event){
         QPoint tPos = event->globalPosition().toPoint()-screenPos;
         move(pos()+tPos);
         screenPos = event->globalPosition().toPoint();
+        m_v = tPos;
+        //if(m_v.manhattanLength()>10){m_v *= 10/m_v.manhattanLength();}
     }
 
 }
 void character::mousePressEvent(QMouseEvent* event){
 
     mouse_clicked_flag = true;
+    IfFloat = false;
+
     screenPos = event->globalPosition().toPoint();
     if(event->button()==Qt::RightButton){
         nowaction->returnNext();
@@ -115,6 +147,8 @@ void character::mousePressEvent(QMouseEvent* event){
 }
 void character::mouseReleaseEvent(QMouseEvent* event){
     Q_UNUSED(event);
+    m_p = pos();
+    IfFloat = true;
     mouse_clicked_flag = false;
 }
 void character::paintEvent(QPaintEvent* event){
@@ -123,9 +157,16 @@ void character::paintEvent(QPaintEvent* event){
 
     nowaction->Paint(p,StableP,NowScale,IfRLTurn);
     if(nowaction->Ifend){
-        if(rand()/(RAND_MAX*1.0)>0.5){
-            IfRLTurn = !IfRLTurn;
+        if((ActionMode==0)||IfFloat||mouse_clicked_flag){
+            nowaction->reset();//保存动作不变
+            nowaction = &actions[0];//始终是静止状态
         }
-        setAction(nowaction->returnNext());
+        else{
+            if((rand()/(RAND_MAX*1.0)>0.5)&&(nowaction==&actions[0])){
+                IfRLTurn = !IfRLTurn;
+            }
+            setAction(nowaction->returnNext());
+        }
+
     }
 }

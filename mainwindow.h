@@ -53,6 +53,12 @@ private slots:
 
     void on_horizontalSlider_2_valueChanged(int value);
 
+    void on_radioButton_clicked();
+
+    void on_radioButton_2_clicked();
+
+    void on_radioButton_3_clicked();
+
 private:
     Ui::MainWindow *ui;
     processlist* sub1;

@@ -98,11 +98,11 @@ QPoint action::MoveWidget(QPoint nowp,bool IfRLTurn){
     }else{
         nowp += Movexy;
     }
-    if(nowp.x()>1520){
-        nowp.setX(-ImgSize.width());
+    if(nowp.x()>1410){
+        nowp.setX(-90);
     }
-    if(nowp.x()<0){
-        nowp.setX(1520);
+    if(nowp.x()<-90){
+        nowp.setX(1410);
     }
     if(nowp.y()>1080){
         nowp.setY(0);

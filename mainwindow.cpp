@@ -258,3 +258,27 @@ void MainWindow::on_pushButton_5_clicked()
 
 
 
+
+void MainWindow::on_radioButton_clicked()
+{
+    if(ui->radioButton->isChecked()){
+        sub_show->setActionMode(0);
+    }
+}
+
+
+void MainWindow::on_radioButton_2_clicked()
+{
+    if(ui->radioButton_2->isChecked()){
+        sub_show->setActionMode(1);
+    }
+}
+
+
+void MainWindow::on_radioButton_3_clicked()
+{
+    if(ui->radioButton_3->isChecked()){
+        sub_show->setActionMode(2);
+    }
+}
+

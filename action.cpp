@@ -11,7 +11,8 @@ action::action(QString dir)
     ImgNum = 0;
     nowIndex = 0;
 
-    Ifloop = true;
+//    Ifloop = true;
+    Ifloop = 1;//只一次
 
     Ifend = false;
 
@@ -60,6 +61,7 @@ bool action::Paint(QPainter& p,QPoint ScreenStable,double Scale,bool IfRLturn){
     Show_LUp =ScreenStable-StableP*Scale;
 
     if(nowIndex<ImgNum){
+
         if(IfChangeSize&&false){
             NowImg = QImage(ImgList[nowIndex]).scaled(ShowSize);
             p.drawImage(QPointF(0,0),NowImg);
@@ -83,11 +85,21 @@ bool action::Paint(QPainter& p,QPoint ScreenStable,double Scale,bool IfRLturn){
         nowIndex++;
     }
     if(nowIndex>=ImgNum){
+        Ifloop --;
         Ifend = true;
-        if(Ifloop){
-            nowIndex = 0;
-            Ifend = false;
+        if(Ifloop!=0){
+            if(Ifloop<0){
+                Ifloop = -1;
+                nowIndex = 0;
+                Ifend = false;
+            }
+            else{
+
+                nowIndex = 0;
+                Ifend = false;
+            }
         }
+
     }
     return true;
 }
@@ -117,6 +129,16 @@ bool action::setNext(action* next){
     nextaction = next;
 }
 action* action::returnNext(){
-    reset();//返回下一个后就复位
+    reset(true);//返回下一个后就复位
     return nextaction;
+}
+void action::reset(bool IfRandom){
+    if(IfRandom){
+        Ifloop = rand()%3+1; //1~3
+    }
+    else{
+        Ifloop = 1;//只一次
+    }
+    Ifend = false;
+    nowIndex=0;
 }

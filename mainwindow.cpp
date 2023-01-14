@@ -9,16 +9,22 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
-
+    CharacterNum = 0;
     sub1 = new processlist;
     sub2 = new wininfo;
+
     sub_show = new character;
     sub_show->setWindowFlag(Qt::Tool);
+    sub_show->show();
+    sub_ask = new AskAnswer;
+    sub_ask->setWindowFlag(Qt::Tool);
+    sub_ask->show();
+
     ui->stackedWidget->addWidget(sub1);
     ui->stackedWidget->addWidget(sub2);
     ui->stackedWidget->setCurrentWidget(sub1);
     ui->stackedWidget->setCurrentIndex(0);
-    sub_show->show();
+
     //------
     Create_TrayIcon();
     //-----
@@ -28,14 +34,28 @@ MainWindow::MainWindow(QWidget *parent)
     ui->horizontalSlider_2->setRange(10,100);
     ui->horizontalSlider_2->setValue(58);
     ui->checkBox_3->setChecked(true);
-
+    ui->checkBox_2->setChecked(true);
+    ui->checkBox_6->setChecked(true);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::Create_character(){
+    if(CharacterNum>=MaxCharacterNum){
+        ;
+    }
+    else{
+        mycharacters[CharacterNum] = new character;
+
+        mycharacters[CharacterNum]->setWindowFlag(Qt::Tool);
+        mycharacters[CharacterNum]->show();
+    }
+    CharacterNum++;
+}
 void MainWindow::Create_TrayIcon(){
+
     mSysTrayIcon = new QSystemTrayIcon(this);
 
     icon = QIcon(":/new/prefix1/picture/boji.png");
@@ -94,7 +114,6 @@ void MainWindow::on_pushButton_2_clicked()
 void MainWindow::on_pushButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(sub1);
-
 }
 
 
@@ -184,9 +203,11 @@ void MainWindow::on_checkBox_3_stateChanged(int arg1)
         if(ui->checkBox_5->isChecked()){
             ui->checkBox_5->setChecked(false);
         }
+        SetWindowPos(sub_ask->thisWinId,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
         SetWindowPos(sub_show->thisWinId,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
     else{
+        SetWindowPos(sub_ask->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
         SetWindowPos(sub_show->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
 }
@@ -201,11 +222,11 @@ void MainWindow::on_checkBox_5_stateChanged(int arg1)
 //        if(desktopHwnd){
 
 //        }
-        //SetWindowPos(sub_show->thisWinId,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+        SetWindowPos(sub_ask->thisWinId,HWND_BOTTOM,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
         SetWindowPos(sub_show->thisWinId,HWND_BOTTOM,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
     else{
-
+        SetWindowPos(sub_ask->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
         SetWindowPos(sub_show->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
 }
@@ -214,8 +235,10 @@ void MainWindow::on_checkBox_5_stateChanged(int arg1)
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
+    //透明度
     ui->label_3->setText(QString::number(value));
     sub_show->change_transparent(value);
+    sub_ask-> change_transparent(value);
 }
 void MainWindow::on_checkBox_6_stateChanged(int arg1)
 {
@@ -228,37 +251,34 @@ void MainWindow::on_checkBox_6_stateChanged(int arg1)
 }
 void MainWindow::on_horizontalSlider_2_valueChanged(int value)
 {
+    //大小
     ui->label_6->setText(QString::number(value));
     sub_show->change_size(value);
 }
-BOOL enumUserWindowsCB(HWND hwnd,LPARAM lParam)
-{
-    long wflags = GetWindowLong(hwnd, GWL_STYLE);
-    if(!(wflags & WS_VISIBLE)) return TRUE;
-    HWND sndWnd;
-    if( !(sndWnd=FindWindowEx(hwnd, NULL, L"SHELLDLL_DefView", NULL)) ) return TRUE;
-    HWND targetWnd;
-    if( !(targetWnd=FindWindowEx(sndWnd, NULL, L"SysListView32", L"FolderView")) ) return TRUE;
-    HWND* resultHwnd = (HWND*)lParam;
-    *resultHwnd = targetWnd;
-    return FALSE;
-}
+//寻找桌面
+//BOOL enumUserWindowsCB(HWND hwnd,LPARAM lParam)
+//{
+//    long wflags = GetWindowLong(hwnd, GWL_STYLE);
+//    if(!(wflags & WS_VISIBLE)) return TRUE;
+//    HWND sndWnd;
+//    if( !(sndWnd=FindWindowEx(hwnd, NULL, L"SHELLDLL_DefView", NULL)) ) return TRUE;
+//    HWND targetWnd;
+//    if( !(targetWnd=FindWindowEx(sndWnd, NULL, L"SysListView32", L"FolderView")) ) return TRUE;
+//    HWND* resultHwnd = (HWND*)lParam;
+//    *resultHwnd = targetWnd;
+//    return FALSE;
+//}
 
-HWND findDesktopIconWnd(){
-    HWND resultHwnd = NULL;
-    EnumWindows((WNDENUMPROC)enumUserWindowsCB, (LPARAM)&resultHwnd);
-    return resultHwnd;
-}
+//HWND findDesktopIconWnd(){
+//    HWND resultHwnd = NULL;
+//    EnumWindows((WNDENUMPROC)enumUserWindowsCB, (LPARAM)&resultHwnd);
+//    return resultHwnd;
+//}
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    sub_show->move(0,574);
+    sub_show->reset();
 }
-
-
-
-
-
 void MainWindow::on_radioButton_clicked()
 {
     if(ui->radioButton->isChecked()){
@@ -280,5 +300,19 @@ void MainWindow::on_radioButton_3_clicked()
     if(ui->radioButton_3->isChecked()){
         sub_show->setActionMode(2);
     }
+}
+
+
+void MainWindow::on_pushButton_7_clicked()
+{
+    //add character
+
+
+}
+
+
+void MainWindow::on_pushButton_6_clicked()
+{
+
 }
 

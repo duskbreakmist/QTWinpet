@@ -4,10 +4,13 @@
 #include <QMainWindow>
 #include "processlist.h"
 #include "wininfo.h"
-#include "character.h"
+
 #include "stable.h"
 #include <qsystemtrayicon.h>
+#include "askanswer.h"
+#include "character.h"
 
+#define MaxCharacterNum 20
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -20,7 +23,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void Create_TrayIcon();
-
+    void Create_character();
+    int CharacterNum;
 private slots:
 
     void on_pushButton_2_clicked();
@@ -59,11 +63,17 @@ private slots:
 
     void on_radioButton_3_clicked();
 
+    void on_pushButton_7_clicked();
+
+    void on_pushButton_6_clicked();
+
 private:
     Ui::MainWindow *ui;
     processlist* sub1;
     wininfo * sub2;
     character * sub_show;
+    character * mycharacters[MaxCharacterNum];
+    AskAnswer *sub_ask;
     //--
     QIcon icon;
     QIcon icon2;

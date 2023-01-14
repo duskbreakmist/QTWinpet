@@ -12,5 +12,10 @@
 #include <QMediaPlayer>
 #include <QVideoWidget>
 #include <QSoundEffect>
+
+#include "qsize.h"
+#include <qdir.h>
+#include <qpainter.h>
 //#include <QtGlobal>
+#include <qdir.h>
 #endif // STABLE_H

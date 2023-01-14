@@ -1,7 +1,7 @@
 QT += core gui
 QT += multimedia
 QT += multimediawidgets
-
+# QT += widgets
 RC_ICONS = boji.ico
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,6 +13,7 @@ CONFIG += c++17
 
 SOURCES += \
     action.cpp \
+    askanswer.cpp \
     character.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     action.h \
+    askanswer.h \
     character.h \
     mainwindow.h \
     processlist.h \
@@ -30,6 +32,7 @@ HEADERS += \
     wininfo.h
 
 FORMS += \
+    askanswer.ui \
     character.ui \
     mainwindow.ui \
     processlist.ui \

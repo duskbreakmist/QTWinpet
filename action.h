@@ -1,11 +1,9 @@
 #ifndef ACTION_H
 #define ACTION_H
 #include "qimage.h"
-#include "qsize.h"
+
 #include <QObject>
-#include <qdir.h>
-#include <QDebug>
-#include <qpainter.h>
+#include "stable.h"
 class action
 {
 public:
@@ -23,7 +21,9 @@ public:
     QImage NowImg;
     int ImgNum;
     int nowIndex;
-    bool Ifloop;
+//    bool Ifloop;
+    int Ifloop;
+    //-1==loop,0=noloop,+num=loopnum
     int LoopStartIndex;
     int LoopEndIndex;
     bool Ifend;
@@ -35,7 +35,7 @@ public:
     bool setNext(action* next);
 
     action* returnNext();
-    void reset(){Ifend = false;nowIndex=0;}
+    void reset(bool IfRandom=false);
     //图像显示和移动部分
     bool Paint(QPainter& p,QPoint ScreenStable,double Scale=1,bool IfRLturn=false);
     int MoveMode;

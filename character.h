@@ -5,6 +5,8 @@
 #include <QMovie>
 #include "action.h"
 #include <stable.h>
+
+
 #define SCREENwidth 250
 #define SCREENheight 250
 namespace Ui {
@@ -40,10 +42,12 @@ public:
     int ground_y;
     bool IfFloat;
     bool IfPhy;
+    char loopval;//为了分频而做
+    void reset();
 
 private slots:
-    void Automove();
-    void AutoPicUpdate();
+    bool Automove();
+    //void AutoPicUpdate();
 private:
     Ui::character *ui;
 
@@ -58,7 +62,9 @@ private:
 
     //QMediaPlayer *player;
     QSoundEffect* soundeffect;
-    QString nowImgDir;
+
+
+
 protected:
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);

@@ -16,25 +16,23 @@ character::character(QWidget *parent) :
     actions[0] = act_relax;
     actions[1] = act_Rwalk;
     actions[2] = act_interact;
-    actions[3] = act_sleep;
+    //actions[3] = act_sleep;
 
     actions[0].StableP.setY(actions[0].StableP.y()-1);
     actions[1].StableP.setY(actions[1].StableP.y()-3);
-    actions[3].StableP.setY(actions[3].StableP.y()-6);
+    //actions[3].StableP.setY(actions[3].StableP.y()-6);
     actions[1].nextaction = &actions[0];
-    actions[1].Ifloop = false;
     actions[1].setMovexy(2,0);
-    actions[0].nextaction = &actions[1];
-    actions[0].Ifloop = false;
-    actions[2].Ifloop = false;
+    actions[0].nextaction = &actions[1]; 
     actions[2].nextaction = &actions[0];
 
-
     setAction(&actions[1]);
+
     IfRLTurn = true;
-    IfFloat = false;
+    IfFloat = true;
+    mouse_clicked_flag = false;
     IfPhy = true;
-    m_g = QPoint(0,1);
+    m_g = QPointF(0,0.5);
     ground_y = 574;
     ActionMode = 1;
 
@@ -46,17 +44,14 @@ character::character(QWidget *parent) :
 
     show();
 
-    mTimer_pic = new QTimer(this);
-    mTimer_pic->start(40);
-    connect(mTimer_pic,SIGNAL(timeout()),this,SLOT(AutoPicUpdate()));
-    mTimer_pos = new QTimer(this);
-    mTimer_pos->start(20);
+    mTimer_pos = new QTimer(this);//这里可以优化，加个判断句实现浮空高刷新率，非浮空低刷新。
+    mTimer_pos->start(10);
     connect(mTimer_pos,SIGNAL(timeout()),this,SLOT(Automove()));
 
     soundeffect = new QSoundEffect;
-    soundeffect->setVolume(0.5);
+    soundeffect->setVolume(0.25);
     soundeffect->setSource(QUrl::fromLocalFile("E:/File/C++File/QT/taskmanager/sound/click.wav"));
-    //player->setSource();
+
 
 }
 
@@ -98,19 +93,32 @@ void character::change_state(int i){
     }
 
 }
-void character::AutoPicUpdate(){
-    update();//更新图片序列
-}
-void character::Automove(){
+//void character::AutoPicUpdate(){
+//    update();//更新图片序列
+//}
+bool character::Automove(){
+    loopval++;
+    if((loopval%4)==0){//4分频
+        update();
+    }
+    else{
+        if(!IfFloat){
+            return false;
+        }
+    }
     if(IfPhy){
         if(IfFloat){
-            m_p += m_v;
+            m_p += m_v/2;
             m_v += m_g;
             if(m_p.y()>= ground_y){
-                m_v = QPoint(0,0);
                 m_p.setY(ground_y);
-                IfFloat = false;
+                if(m_v.manhattanLength()<4){
+                    m_v = QPoint(0,0);
+                    IfFloat = false;
+                }
+                m_v /=-2;
             }
+
             move(m_p.toPoint());
         }
         else{
@@ -120,8 +128,12 @@ void character::Automove(){
     else{
         move(nowaction->MoveWidget(pos(),IfRLTurn));//更新窗口位置。
     }
+    return true;
 }
-
+void character::reset(){
+    move(0,574);
+    m_v = QPoint(0,0);
+}
 void character::mouseMoveEvent(QMouseEvent* event){
     if(mouse_clicked_flag){
         QPoint tPos = event->globalPosition().toPoint()-screenPos;
@@ -133,6 +145,9 @@ void character::mouseMoveEvent(QMouseEvent* event){
 
 }
 void character::mousePressEvent(QMouseEvent* event){
+    //下面两行防止按下后还会动
+    nowaction->reset();//保存动作不变
+    nowaction = &actions[0];//始终是静止状态
 
     mouse_clicked_flag = true;
     IfFloat = false;
@@ -150,12 +165,13 @@ void character::mouseReleaseEvent(QMouseEvent* event){
     m_p = pos();
     IfFloat = true;
     mouse_clicked_flag = false;
+    //if()判断是否浮空
 }
 void character::paintEvent(QPaintEvent* event){
     Q_UNUSED(event);
     QPainter p(this);
 
-    nowaction->Paint(p,StableP,NowScale,IfRLTurn);
+
     if(nowaction->Ifend){
         if((ActionMode==0)||IfFloat||mouse_clicked_flag){
             nowaction->reset();//保存动作不变
@@ -167,6 +183,6 @@ void character::paintEvent(QPaintEvent* event){
             }
             setAction(nowaction->returnNext());
         }
-
     }
+    nowaction->Paint(p,StableP,NowScale,IfRLTurn);
 }

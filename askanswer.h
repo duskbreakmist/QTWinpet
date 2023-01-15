@@ -14,13 +14,12 @@ class AskAnswer : public QWidget
 public:
     explicit AskAnswer(QWidget *parent = nullptr);
     ~AskAnswer();
-    bool CreateFolder();
+
     bool SaveTxt();
     bool SaveInteraction();
     bool UpdateNowWords();
     bool IfExtend;
     QString SaveFloder;
-
     QString NowWords;
     HWND thisWinId;
     void change_transparent(int i);
@@ -32,10 +31,13 @@ private slots:
 
     void on_pushButton_6_clicked();
 
+    void on_textEdit_2_textChanged();
+
 private:
     Ui::AskAnswer *ui;
 
 
 };
+bool CreateFolder(QString Floder);
 
 #endif // ASKANSWER_H

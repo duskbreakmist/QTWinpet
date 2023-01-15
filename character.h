@@ -5,7 +5,8 @@
 #include <QMovie>
 #include "action.h"
 #include <stable.h>
-
+#include "tipcap.h"
+#include "askanswer.h"
 
 #define SCREENwidth 250
 #define SCREENheight 250
@@ -50,8 +51,13 @@ private slots:
     //void AutoPicUpdate();
 private:
     Ui::character *ui;
-
-    bool mouse_clicked_flag;
+    AskAnswer *sub_ask;
+    tipcap * TipCaption;
+    //bool mouse_clicked_flag;
+    bool mouse_clicked_R;
+    bool mouse_moved_R;
+    bool mouse_clicked_L;
+    bool mouse_moved_L;
     bool IfRLTurn;//true== walk left
     QTimer * mTimer_pos;
     QTimer * mTimer_pic;

@@ -16,9 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     sub_show = new character;
     sub_show->setWindowFlag(Qt::Tool);
     sub_show->show();
-    sub_ask = new AskAnswer;
-    sub_ask->setWindowFlag(Qt::Tool);
-    sub_ask->show();
+
 
     ui->stackedWidget->addWidget(sub1);
     ui->stackedWidget->addWidget(sub2);
@@ -203,11 +201,11 @@ void MainWindow::on_checkBox_3_stateChanged(int arg1)
         if(ui->checkBox_5->isChecked()){
             ui->checkBox_5->setChecked(false);
         }
-        SetWindowPos(sub_ask->thisWinId,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+
         SetWindowPos(sub_show->thisWinId,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
     else{
-        SetWindowPos(sub_ask->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+
         SetWindowPos(sub_show->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
 }
@@ -222,11 +220,11 @@ void MainWindow::on_checkBox_5_stateChanged(int arg1)
 //        if(desktopHwnd){
 
 //        }
-        SetWindowPos(sub_ask->thisWinId,HWND_BOTTOM,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+
         SetWindowPos(sub_show->thisWinId,HWND_BOTTOM,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
     else{
-        SetWindowPos(sub_ask->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
+
         SetWindowPos(sub_show->thisWinId,HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     }
 }
@@ -238,7 +236,7 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
     //透明度
     ui->label_3->setText(QString::number(value));
     sub_show->change_transparent(value);
-    sub_ask-> change_transparent(value);
+
 }
 void MainWindow::on_checkBox_6_stateChanged(int arg1)
 {
@@ -307,12 +305,17 @@ void MainWindow::on_pushButton_7_clicked()
 {
     //add character
 
-
 }
 
 
 void MainWindow::on_pushButton_6_clicked()
 {
 
+}
+
+
+void MainWindow::on_textEdit_textChanged()
+{
+    //修改文件路径
 }
 

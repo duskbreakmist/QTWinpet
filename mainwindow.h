@@ -7,7 +7,7 @@
 
 #include "stable.h"
 #include <qsystemtrayicon.h>
-#include "askanswer.h"
+
 #include "character.h"
 
 #define MaxCharacterNum 20
@@ -67,13 +67,15 @@ private slots:
 
     void on_pushButton_6_clicked();
 
+    void on_textEdit_textChanged();
+
 private:
     Ui::MainWindow *ui;
     processlist* sub1;
     wininfo * sub2;
     character * sub_show;
     character * mycharacters[MaxCharacterNum];
-    AskAnswer *sub_ask;
+
     //--
     QIcon icon;
     QIcon icon2;

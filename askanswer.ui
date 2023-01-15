@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>250</width>
-    <height>115</height>
+    <height>250</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -64,6 +64,9 @@
      <height>81</height>
     </rect>
    </property>
+   <property name="placeholderText">
+    <string>ko~ko~da~yo~</string>
+   </property>
   </widget>
   <widget class="QTextEdit" name="textEdit_2">
    <property name="geometry">
@@ -77,11 +80,14 @@
    <property name="toolTip">
     <string>输入留言</string>
    </property>
+   <property name="placeholderText">
+    <string>输入note</string>
+   </property>
   </widget>
   <widget class="QPushButton" name="pushButton_4">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>140</x>
      <y>220</y>
      <width>41</width>
      <height>21</height>
@@ -107,14 +113,14 @@
   <widget class="QPushButton" name="pushButton_6">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>220</y>
-     <width>101</width>
+     <width>71</width>
      <height>21</height>
     </rect>
    </property>
    <property name="text">
-    <string>打开历史记录</string>
+    <string>历史记录</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_7">
@@ -128,6 +134,19 @@
    </property>
    <property name="text">
     <string>关闭</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>220</y>
+     <width>51</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>待保存</string>
    </property>
   </widget>
  </widget>

@@ -16,6 +16,8 @@
 #include "qsize.h"
 #include <qdir.h>
 #include <qpainter.h>
+#include <QProcess>
+#include <QDesktopServices>
 //#include <QtGlobal>
 #include <qdir.h>
 #endif // STABLE_H

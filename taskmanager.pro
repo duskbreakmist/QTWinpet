@@ -19,6 +19,7 @@ SOURCES += \
     mainwindow.cpp \
     processlist.cpp \
     setting.cpp \
+    tipcap.cpp \
     wininfo.cpp
 
 HEADERS += \
@@ -29,6 +30,7 @@ HEADERS += \
     processlist.h \
     setting.h \
     stable.h \
+    tipcap.h \
     wininfo.h
 
 FORMS += \
@@ -37,6 +39,7 @@ FORMS += \
     mainwindow.ui \
     processlist.ui \
     setting.ui \
+    tipcap.ui \
     wininfo.ui
 
 # Default rules for deployment.

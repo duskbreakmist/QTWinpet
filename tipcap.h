@@ -17,6 +17,7 @@ public:
     QString VoiceFolder;
     QString CaptionFile;
 
+    QStringList VoicePath;
     QStringList VoiceTime;
     QStringList Captions;
     int CaptionNum;
@@ -29,7 +30,7 @@ private slots:
 
 private:
     Ui::tipcap *ui;
-
+    QSoundEffect* soundeffect;
     QTimer *mytimer;
 };
 

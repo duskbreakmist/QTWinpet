@@ -14,9 +14,6 @@ character::character(QWidget *parent) :
 //    actions[4].setImgDir(characterFolder+"/sleep");
 //    actions[5].setImgDir(characterFolder+"/special");
 
-
-
-    //actions[3].StableP.setY(actions[3].StableP.y()-6);
     actions[1].setMovexy(2,0);
 
     actions[0].StableP += QPoint(0,-1);
@@ -247,12 +244,12 @@ void character::paintEvent(QPaintEvent* event){
                     IfRLTurn = !IfRLTurn;
                 }
                 if(rand()%10==0){
-                    nowaction->reset();
+                    nowaction->reset(true);
                     actions[5].Ifloop = 1;//特殊动作只能重复一次
                     setAction(&actions[5]);//special
                 }
                 else{
-                    nowaction->reset();
+                    nowaction->reset(true);
                     setAction(&actions[1]);
                 }
             }

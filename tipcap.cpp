@@ -7,8 +7,7 @@ tipcap::tipcap(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlag(Qt::Tool);
-//    VoiceFolder = "/sound";
-//    CaptionFile = "./Data/CaptionFile.txt";
+
 
     mytimer = new QTimer(this);
     mytimer->setInterval(1000);
@@ -19,11 +18,18 @@ tipcap::tipcap(QWidget *parent) :
 
     ui->textEdit->setStyleSheet("background-color: rgba(15, 55, 215, 100);");
 
+    soundeffect = new QSoundEffect;
+    soundeffect->setVolume(0.25);
+
+//    connect(soundeffect,SIGNAL(QSoundEffect::stop()),this,SLOT(WindowHide()));
 }
 
 tipcap::~tipcap()
 {
+    delete soundeffect;
+    delete mytimer;
     delete ui;
+
 }
 void tipcap::UpdateFolder(QString nowfolder){
     VoiceFolder = nowfolder;
@@ -41,11 +47,15 @@ bool tipcap::setCaptionVoice(QPoint LUpoint){
     ui->textEdit->setAlignment(Qt::AlignCenter);
     mytimer->start(VoiceTime.at(temp).toInt());
 
+    soundeffect->setSource(QUrl::fromLocalFile(VoiceFolder+"/"+VoicePath.at(temp)));
+    soundeffect->play();
     return true;
 }
 void tipcap::WindowHide(){
-    hide();
-    mytimer->stop();
+    if(!soundeffect->isPlaying()){
+        hide();
+        mytimer->stop();
+    }
 }
 bool tipcap::readCaption(){
     QFile f(CaptionFile);
@@ -61,12 +71,14 @@ bool tipcap::readCaption(){
     qDebug()<<Data.count();
     VoiceTime.clear();
     Captions.clear();
+    VoicePath.clear();
     for(int i=0;i<Data.count();++i)
     {
-        QStringList strLine = Data.at(i).split(",");     //一行中的单元格以，区分
+        QStringList strLine = Data.at(i).split("/");     //一行中的单元格以，区分
         qDebug()<<strLine.at(0);                        //打印出每行的第一个单元格的数据
         VoiceTime.append(strLine.at(0));
-        Captions.append(strLine.at(1));
+        Captions.append(strLine.at(2));
+        VoicePath.append(strLine.at(1));
     }
 
     CaptionNum = Captions.length();

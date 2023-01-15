@@ -12,17 +12,18 @@ MainWindow::MainWindow(QWidget *parent)
     CharacterNum = 0;
     sub1 = new processlist;
     sub2 = new wininfo;
+    ui->textEdit->setText("./character/Ptilopsi");
+
     Create_character();
-//    sub_show = new character;
-//    sub_show->show();
 
     ui->horizontalSlider->setRange(0,100);
     ui->horizontalSlider_2->setRange(10,100);
     ui->horizontalSlider->setValue(79);
     ui->horizontalSlider_2->setValue(58);
-    ui->checkBox_2->setChecked(true);
-    ui->checkBox_6->setChecked(true);
-
+//    ui->checkBox_2->setChecked(true);
+//    ui->checkBox_6->setChecked(true);
+    ui->checkBox_4->setChecked(false);
+    ui->checkBox_3->setChecked(true);
     ui->stackedWidget->addWidget(sub1);
     ui->stackedWidget->addWidget(sub2);
     ui->stackedWidget->setCurrentWidget(sub1);
@@ -33,8 +34,8 @@ MainWindow::MainWindow(QWidget *parent)
     //-----
 
     //一定要放在最后。
-    ui->textEdit->setText("./character/Ptilopsi");
-    sub_show->show();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -149,6 +150,7 @@ void MainWindow::on_checkBox_4_stateChanged(int arg1)
     else{
         sub_show->show();
     }
+
 }
 
 
@@ -303,14 +305,18 @@ bool MainWindow::Create_character(){
     NowItem = item;
     sub_show = temp;
     sub_show->UpdateFolder(CharacterFolder);
-    sub_show->show();
+
     CharacterNum++;
     ui->label_11->setText(QString::number(CharacterNum));
     ui->label_13->setText(item->text());
+
+    sub_show->show();//这个必须有
+
     //初始化用
+    SetWindowPos(sub_show->thisWinId,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE);
     sub_show->change_transparent(ui->horizontalSlider->value());
     sub_show->change_size(ui->horizontalSlider_2->value());
-    ui->checkBox_3->setChecked(true);
+
 
     return true;
 }
@@ -349,7 +355,6 @@ void MainWindow::on_textEdit_textChanged()
 {
     //修改character文件路径
     CharacterFolder = ui->textEdit->toPlainText();
-    sub_show->UpdateFolder(CharacterFolder);
 }
 
 
@@ -361,6 +366,9 @@ void MainWindow::on_pushButton_8_clicked()
         ui->textEdit->setText(folder);
     }
 }
-
-
+void MainWindow::on_pushButton_9_clicked()
+{
+    //更改当前
+    sub_show->UpdateFolder(CharacterFolder);
+}
 

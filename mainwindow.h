@@ -74,6 +74,8 @@ private slots:
 
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_pushButton_9_clicked();
+
 private:
     Ui::MainWindow *ui;
     processlist* sub1;

@@ -17,7 +17,7 @@ tipcap::tipcap(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlag(Qt::FramelessWindowHint);
 
-    ui->textEdit->setStyleSheet("background-color: rgba(105, 55, 215, 60);");
+    ui->textEdit->setStyleSheet("background-color: rgba(15, 55, 215, 100);");
 
 }
 
@@ -59,6 +59,8 @@ bool tipcap::readCaption(){
     QTextStream * read = new QTextStream(&f);
     QStringList Data = read->readAll().split("\n");
     qDebug()<<Data.count();
+    VoiceTime.clear();
+    Captions.clear();
     for(int i=0;i<Data.count();++i)
     {
         QStringList strLine = Data.at(i).split(",");     //一行中的单元格以，区分

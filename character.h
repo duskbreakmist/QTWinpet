@@ -64,7 +64,7 @@ private:
     QTimer * mTimer_pos;
 
 
-    action actions[10];
+    action actions[7];
     action* nowaction;
     int ActionMode;
 

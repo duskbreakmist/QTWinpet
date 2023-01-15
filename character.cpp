@@ -7,21 +7,28 @@ character::character(QWidget *parent) :
 {
     ui->setupUi(this);
 
+//    actions[0].setImgDir(characterFolder+"/relax");
+//    actions[1].setImgDir(characterFolder+"/move");
+//    actions[2].setImgDir(characterFolder+"/interact");
+//    actions[3].setImgDir(characterFolder+"/sit");
+//    actions[4].setImgDir(characterFolder+"/sleep");
+//    actions[5].setImgDir(characterFolder+"/special");
 
-//    action act_interact("E:/File/SpineWorkPlace/outputPNG/白面鸮/interact");
-//    action act_Rwalk("E:/File/SpineWorkPlace/outputPNG/白面鸮/MoveR");
-//    action act_relax("E:/File/SpineWorkPlace/outputPNG/白面鸮/relax");
-//    action act_sleep("E:/File/SpineWorkPlace/outputPNG/白面鸮/sleep");
-    //上面都是临时变量，需要下面去储存。
-    //UpdateFolder("E:/File/SpineWorkPlace/outputPNG/白面鸮");
 
-    actions[0].StableP.setY(actions[0].StableP.y()-1);
-    actions[1].StableP.setY(actions[1].StableP.y()-3);
+
     //actions[3].StableP.setY(actions[3].StableP.y()-6);
-    actions[1].nextaction = &actions[0];
     actions[1].setMovexy(2,0);
+
+    actions[0].StableP += QPoint(0,-1);
+    actions[1].StableP += QPoint(0,-3);
+//    actions[5].StableP += QPoint(0,-60);
+
     actions[0].nextaction = &actions[1]; 
+    actions[1].nextaction = &actions[0];
     actions[2].nextaction = &actions[0];
+    actions[3].nextaction = &actions[0];
+    actions[4].nextaction = &actions[0];
+    actions[5].nextaction = &actions[0];
 
     setAction(&actions[1]);
 
@@ -40,7 +47,7 @@ character::character(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlag(Qt::FramelessWindowHint);
     setWindowFlag(Qt::Tool);
-    show();
+
 
     mTimer_pos = new QTimer(this);//这里可以优化，加个判断句实现浮空高刷新率，非浮空低刷新。
     mTimer_pos->start(10);
@@ -64,8 +71,11 @@ character::~character()
 void character::UpdateFolder(QString nowfolder){
     characterFolder = nowfolder;
     actions[0].setImgDir(characterFolder+"/relax");
-    actions[1].setImgDir(characterFolder+"/MoveR");
+    actions[1].setImgDir(characterFolder+"/move");
     actions[2].setImgDir(characterFolder+"/interact");
+    actions[3].setImgDir(characterFolder+"/sit");
+    actions[4].setImgDir(characterFolder+"/sleep");
+    actions[5].setImgDir(characterFolder+"/special");
     soundeffect->setSource(QUrl::fromLocalFile(characterFolder+"/sound/click.wav"));
     TipCaption->UpdateFolder(characterFolder+"/sound");
 }
@@ -232,10 +242,24 @@ void character::paintEvent(QPaintEvent* event){
             nowaction = &actions[0];//始终是静止状态
         }
         else{
-            if((rand()/(RAND_MAX*1.0)>0.5)&&(nowaction==&actions[0])){
-                IfRLTurn = !IfRLTurn;
+            if(nowaction==&actions[0]){
+                if(rand()%2==1){
+                    IfRLTurn = !IfRLTurn;
+                }
+                if(rand()%10==0){
+                    nowaction->reset();
+                    actions[5].Ifloop = 1;//特殊动作只能重复一次
+                    setAction(&actions[5]);//special
+                }
+                else{
+                    nowaction->reset();
+                    setAction(&actions[1]);
+                }
             }
-            setAction(nowaction->returnNext());
+            else{
+                nowaction->reset(true);
+                setAction(&actions[0]);
+            }
         }
     }
     nowaction->Paint(p,StableP,NowScale,IfRLTurn);

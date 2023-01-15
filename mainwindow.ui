@@ -94,7 +94,7 @@
           <x>10</x>
           <y>10</y>
           <width>201</width>
-          <height>231</height>
+          <height>221</height>
          </rect>
         </property>
         <property name="title">
@@ -439,7 +439,7 @@
         <property name="geometry">
          <rect>
           <x>200</x>
-          <y>250</y>
+          <y>240</y>
           <width>171</width>
           <height>31</height>
          </rect>
@@ -457,7 +457,7 @@ hr { height: 1px; border-width: 0; }
         <property name="geometry">
          <rect>
           <x>380</x>
-          <y>250</y>
+          <y>230</y>
           <width>71</width>
           <height>29</height>
          </rect>
@@ -500,6 +500,19 @@ hr { height: 1px; border-width: 0; }
         </property>
         <property name="text">
          <string>Ptilopsi</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_9">
+        <property name="geometry">
+         <rect>
+          <x>380</x>
+          <y>260</y>
+          <width>71</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>更改当前</string>
         </property>
        </widget>
       </widget>

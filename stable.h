@@ -12,12 +12,13 @@
 #include <QMediaPlayer>
 #include <QVideoWidget>
 #include <QSoundEffect>
-
+#include <QFileDialog>
 #include "qsize.h"
 #include <qdir.h>
 #include <qpainter.h>
 #include <QProcess>
 #include <QDesktopServices>
+#include <QListWidgetItem>
 //#include <QtGlobal>
 #include <qdir.h>
 #endif // STABLE_H

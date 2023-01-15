@@ -16,13 +16,14 @@ public:
     ~tipcap();
     QString VoiceFolder;
     QString CaptionFile;
+
     QStringList VoiceTime;
     QStringList Captions;
     int CaptionNum;
 
     bool setCaptionVoice(QPoint LUpoint);
     bool readCaption();
-
+    void UpdateFolder(QString nowfolder);
 private slots:
     void WindowHide();
 

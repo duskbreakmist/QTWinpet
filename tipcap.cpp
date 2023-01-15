@@ -7,8 +7,8 @@ tipcap::tipcap(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlag(Qt::Tool);
-    VoiceFolder = "";
-    CaptionFile = "./Data/CaptionFile.txt";
+//    VoiceFolder = "/sound";
+//    CaptionFile = "./Data/CaptionFile.txt";
 
     mytimer = new QTimer(this);
     mytimer->setInterval(1000);
@@ -19,13 +19,16 @@ tipcap::tipcap(QWidget *parent) :
 
     ui->textEdit->setStyleSheet("background-color: rgba(105, 55, 215, 60);");
 
-
-    readCaption();
 }
 
 tipcap::~tipcap()
 {
     delete ui;
+}
+void tipcap::UpdateFolder(QString nowfolder){
+    VoiceFolder = nowfolder;
+    CaptionFile = nowfolder+"/CaptionFile.txt";
+    readCaption();
 }
 bool tipcap::setCaptionVoice(QPoint LUpoint){
     //this->move()

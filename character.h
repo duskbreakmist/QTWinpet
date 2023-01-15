@@ -21,6 +21,8 @@ class character : public QWidget
 public:
     explicit character(QWidget *parent = nullptr);
     ~character();
+    void UpdateFolder(QString nowfolder);
+    QString characterFolder;
     void change_state(int i);
     void change_transparent(int i);
     void change_size(int i);
@@ -60,7 +62,7 @@ private:
     bool mouse_moved_L;
     bool IfRLTurn;//true== walk left
     QTimer * mTimer_pos;
-    QTimer * mTimer_pic;
+
 
     action actions[10];
     action* nowaction;

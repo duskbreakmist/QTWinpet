@@ -33,6 +33,8 @@ private slots:
 
     void on_textEdit_2_textChanged();
 
+    void on_pushButton_7_clicked();
+
 private:
     Ui::AskAnswer *ui;
 

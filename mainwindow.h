@@ -23,8 +23,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void Create_TrayIcon();
-    void Create_character();
-    int CharacterNum;
+    bool Create_character();
+
+    QString CharacterFolder;
 private slots:
 
     void on_pushButton_2_clicked();
@@ -69,13 +70,19 @@ private slots:
 
     void on_textEdit_textChanged();
 
+    void on_pushButton_8_clicked();
+
+    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+
 private:
     Ui::MainWindow *ui;
     processlist* sub1;
     wininfo * sub2;
-    character * sub_show;
-    character * mycharacters[MaxCharacterNum];
-
+    character * sub_show;//之后这个将成为诸多character的临时索引
+    QListWidgetItem *NowItem;
+//    int NowItemIndex;
+    //    character * mycharacters[MaxCharacterNum];
+    int CharacterNum;
     //--
     QIcon icon;
     QIcon icon2;

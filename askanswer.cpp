@@ -139,3 +139,10 @@ void AskAnswer::on_textEdit_2_textChanged()
     ui->label->setText("待保存");
 }
 
+
+void AskAnswer::on_pushButton_7_clicked()
+{
+    //关闭
+    hide();
+}
+

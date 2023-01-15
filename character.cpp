@@ -7,16 +7,13 @@ character::character(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //action act_interact("E:/File/BlenderWorkPlace/blender3.4/ailini_all/outpng2");
-    action act_interact("E:/File/SpineWorkPlace/outputPNG/白面鸮/interact");
-    action act_Rwalk("E:/File/SpineWorkPlace/outputPNG/白面鸮/MoveR");
-    action act_relax("E:/File/SpineWorkPlace/outputPNG/白面鸮/relax");
-    action act_sleep("E:/File/SpineWorkPlace/outputPNG/白面鸮/sleep");
+
+//    action act_interact("E:/File/SpineWorkPlace/outputPNG/白面鸮/interact");
+//    action act_Rwalk("E:/File/SpineWorkPlace/outputPNG/白面鸮/MoveR");
+//    action act_relax("E:/File/SpineWorkPlace/outputPNG/白面鸮/relax");
+//    action act_sleep("E:/File/SpineWorkPlace/outputPNG/白面鸮/sleep");
     //上面都是临时变量，需要下面去储存。
-    actions[0] = act_relax;
-    actions[1] = act_Rwalk;
-    actions[2] = act_interact;
-    //actions[3] = act_sleep;
+    //UpdateFolder("E:/File/SpineWorkPlace/outputPNG/白面鸮");
 
     actions[0].StableP.setY(actions[0].StableP.y()-1);
     actions[1].StableP.setY(actions[1].StableP.y()-3);
@@ -42,7 +39,7 @@ character::character(QWidget *parent) :
     thisWinId = (HWND)winId();
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlag(Qt::FramelessWindowHint);
-
+    setWindowFlag(Qt::Tool);
     show();
 
     mTimer_pos = new QTimer(this);//这里可以优化，加个判断句实现浮空高刷新率，非浮空低刷新。
@@ -51,7 +48,7 @@ character::character(QWidget *parent) :
 
     soundeffect = new QSoundEffect;
     soundeffect->setVolume(0.25);
-    soundeffect->setSource(QUrl::fromLocalFile("E:/File/C++File/QT/taskmanager/sound/click.wav"));
+
 
     TipCaption = new tipcap;
     sub_ask = new AskAnswer;
@@ -59,7 +56,18 @@ character::character(QWidget *parent) :
 
 character::~character()
 {
+    delete TipCaption;
+    delete sub_ask;
+    delete mTimer_pos;
     delete ui;
+}
+void character::UpdateFolder(QString nowfolder){
+    characterFolder = nowfolder;
+    actions[0].setImgDir(characterFolder+"/relax");
+    actions[1].setImgDir(characterFolder+"/MoveR");
+    actions[2].setImgDir(characterFolder+"/interact");
+    soundeffect->setSource(QUrl::fromLocalFile(characterFolder+"/sound/click.wav"));
+    TipCaption->UpdateFolder(characterFolder+"/sound");
 }
 void character::setAction(action* act){ 
     AutoRisize(NowScale*act->ImgSize);

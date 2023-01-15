@@ -30,6 +30,7 @@ bool action::setMovexy(int x,int y){
 }
 bool action::setImgDir(QString dir){
     if(dir == ImgDir){
+        qDebug()<<"图片路径相同";
         return false;
     }
     else{
@@ -38,10 +39,11 @@ bool action::setImgDir(QString dir){
                 = tmpDir.entryInfoList
                 (QDir::Files|QDir::Dirs|QDir::NoDotAndDotDot,QDir::Name);
         if(listInfo.isEmpty()){
-            qDebug()<<"dfd";
+            qDebug()<<"图片文件夹为空或无法读取";
             return false;
         }
         if(true){//应该有个判断是否是图片文件
+            qDebug()<<"图片文件夹更新";
             state = 1;
             ImgDir = dir;
             ImgList.clear();

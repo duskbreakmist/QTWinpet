@@ -12,11 +12,16 @@ MainWindow::MainWindow(QWidget *parent)
     CharacterNum = 0;
     sub1 = new processlist;
     sub2 = new wininfo;
+    Create_character();
+//    sub_show = new character;
+//    sub_show->show();
 
-    sub_show = new character;
-    sub_show->setWindowFlag(Qt::Tool);
-    sub_show->show();
-
+    ui->horizontalSlider->setRange(0,100);
+    ui->horizontalSlider_2->setRange(10,100);
+    ui->horizontalSlider->setValue(79);
+    ui->horizontalSlider_2->setValue(58);
+    ui->checkBox_2->setChecked(true);
+    ui->checkBox_6->setChecked(true);
 
     ui->stackedWidget->addWidget(sub1);
     ui->stackedWidget->addWidget(sub2);
@@ -26,32 +31,17 @@ MainWindow::MainWindow(QWidget *parent)
     //------
     Create_TrayIcon();
     //-----
-    ui->horizontalSlider->setRange(0,100);
-    ui->horizontalSlider->setValue(79);
 
-    ui->horizontalSlider_2->setRange(10,100);
-    ui->horizontalSlider_2->setValue(58);
-    ui->checkBox_3->setChecked(true);
-    ui->checkBox_2->setChecked(true);
-    ui->checkBox_6->setChecked(true);
+    //一定要放在最后。
+    ui->textEdit->setText("./character/Ptilopsi");
+    sub_show->show();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::Create_character(){
-    if(CharacterNum>=MaxCharacterNum){
-        ;
-    }
-    else{
-        mycharacters[CharacterNum] = new character;
 
-        mycharacters[CharacterNum]->setWindowFlag(Qt::Tool);
-        mycharacters[CharacterNum]->show();
-    }
-    CharacterNum++;
-}
 void MainWindow::Create_TrayIcon(){
 
     mSysTrayIcon = new QSystemTrayIcon(this);
@@ -300,22 +290,77 @@ void MainWindow::on_radioButton_3_clicked()
     }
 }
 
+bool MainWindow::Create_character(){
+    if(CharacterNum>=MaxCharacterNum){
+        qDebug()<<">max character";
+        return false;
+    }
+    QListWidgetItem *item = new QListWidgetItem;
+    character* temp = new character;
+    item->setText(QString::number(CharacterNum));
+    item->setData(Qt::UserRole,QVariant::fromValue((void *) temp));
+    ui->listWidget->addItem(item);
+    NowItem = item;
+    sub_show = temp;
+    sub_show->UpdateFolder(CharacterFolder);
+    sub_show->show();
+    CharacterNum++;
+    ui->label_11->setText(QString::number(CharacterNum));
+    ui->label_13->setText(item->text());
+    //初始化用
+    sub_show->change_transparent(ui->horizontalSlider->value());
+    sub_show->change_size(ui->horizontalSlider_2->value());
+    ui->checkBox_3->setChecked(true);
 
+    return true;
+}
 void MainWindow::on_pushButton_7_clicked()
 {
     //add character
+    Create_character();
 
 }
-
+void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    //选中角色
+    NowItem = item;
+    ui->label_13->setText(item->text());
+    sub_show = (character*) item->data(Qt::UserRole).value<void *>();
+}
 
 void MainWindow::on_pushButton_6_clicked()
 {
-
+    //删除角色
+    if(CharacterNum>1){
+        sub_show->close();
+        delete sub_show;
+        ui->listWidget->removeItemWidget(NowItem);
+        delete NowItem;
+        CharacterNum--;
+        NowItem =  ui->listWidget->item(CharacterNum-1);
+        ui->label_13->setText(NowItem->text());
+        sub_show = (character*)NowItem->data(Qt::UserRole).value<void *>();
+        ui->label_11->setText(QString::number(CharacterNum));
+    }
 }
 
 
 void MainWindow::on_textEdit_textChanged()
 {
-    //修改文件路径
+    //修改character文件路径
+    CharacterFolder = ui->textEdit->toPlainText();
+    sub_show->UpdateFolder(CharacterFolder);
 }
+
+
+void MainWindow::on_pushButton_8_clicked()
+{
+    //浏览文件夹
+    QString folder = QFileDialog::getExistingDirectory(this, "选择目录", "./", QFileDialog::ShowDirsOnly);
+    if(!folder.isNull()){
+        ui->textEdit->setText(folder);
+    }
+}
+
+
 

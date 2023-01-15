@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     CharacterNum = 0;
     sub1 = new processlist;
     sub2 = new wininfo;
-    ui->textEdit->setText("./character/Ptilopsi");
+    ui->textEdit->setText("./character/斯卡蒂皮肤");
 
     Create_character();
 
@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     Create_TrayIcon();
     //-----
 
-    //一定要放在最后。
+
 
 
 }

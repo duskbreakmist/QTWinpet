@@ -16,7 +16,7 @@ tipcap::tipcap(QWidget *parent) :
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlag(Qt::FramelessWindowHint);
 
-    ui->textEdit->setStyleSheet("background-color: rgba(15, 55, 215, 100);");
+    ui->textEdit->setStyleSheet("background-color: rgba(115, 55, 215, 100);");
 
     soundeffect = new QSoundEffect;
     soundeffect->setVolume(0.25);

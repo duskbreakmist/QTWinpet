@@ -1,6 +1,6 @@
 #ifndef SETTING_H
 #define SETTING_H
-
+//设置界面
 #include <QWidget>
 
 namespace Ui {

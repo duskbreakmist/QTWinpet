@@ -1,7 +1,7 @@
 #ifndef ACTION_H
 #define ACTION_H
+//角色运动行为类
 #include "qimage.h"
-
 #include <QObject>
 #include "stable.h"
 class action

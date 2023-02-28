@@ -1,6 +1,6 @@
 #ifndef ASKANSWER_H
 #define ASKANSWER_H
-
+//可输入输出对话窗口
 #include <QWidget>
 #include "stable.h"
 namespace Ui {

@@ -18,6 +18,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     processlist.cpp \
+    reminder.cpp \
     setting.cpp \
     tipcap.cpp \
     wininfo.cpp
@@ -28,6 +29,7 @@ HEADERS += \
     character.h \
     mainwindow.h \
     processlist.h \
+    reminder.h \
     setting.h \
     stable.h \
     tipcap.h \
@@ -38,6 +40,7 @@ FORMS += \
     character.ui \
     mainwindow.ui \
     processlist.ui \
+    reminder.ui \
     setting.ui \
     tipcap.ui \
     wininfo.ui

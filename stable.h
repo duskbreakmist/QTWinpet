@@ -1,6 +1,6 @@
 #ifndef STABLE_H
 #define STABLE_H
-
+//所有引用
 #include <windows.h>
 #include <tlhelp32.h>
 #include <Psapi.h>

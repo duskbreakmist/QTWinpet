@@ -54,12 +54,14 @@ character::character(QWidget *parent) :
     soundeffect->setVolume(0.25);
 
 
-    TipCaption = new tipcap;
-    sub_ask = new AskAnswer;
+    TipCaption = new tipcap(this);//不知道为什么这个this没用
+    sub_ask = new AskAnswer(this);
+    mReminder = new reminder;
 }
 
 character::~character()
 {
+    delete mReminder;
     delete TipCaption;
     delete sub_ask;
     delete mTimer_pos;
@@ -208,7 +210,10 @@ void character::mouseReleaseEvent(QMouseEvent* event){
         }
         else{
             QPoint tPos = event->globalPosition().toPoint()-screenPos;
-            if(tPos.rx()>0){
+            if(tPos.rx()>10){
+                sub_ask->show();
+            }
+            if(tPos.rx()<10){
                 sub_ask->show();
             }
         }
@@ -220,8 +225,8 @@ void character::mouseReleaseEvent(QMouseEvent* event){
             IfFloat = true;
         }
         else{
-            TipCaption->setCaptionVoice(nowaction->Show_LUp+pos());
-//            TipCaption->setCaptionVoice(QPoint(1000,100));
+//            TipCaption->setCaptionVoice(nowaction->Show_LUp+pos());
+            TipCaption->setCaptionVoice(nowaction->Show_LUp+QPoint(13,-10));
             qDebug()<<"怎么了";
         }
     }
@@ -254,7 +259,13 @@ void character::paintEvent(QPaintEvent* event){
                 }
             }
             else{
-                nowaction->reset(true);
+                if(nowaction==&actions[2]){
+                    nowaction->reset();
+                }
+                else{
+                    nowaction->reset(true);
+                }
+
                 setAction(&actions[0]);
             }
         }

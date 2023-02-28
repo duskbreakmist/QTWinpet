@@ -9,6 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
 
     ui->setupUi(this);
+    setWindowTitle("控制面板");
+
+
     CharacterNum = 0;
     sub1 = new processlist;
     sub2 = new wininfo;
@@ -33,13 +36,16 @@ MainWindow::MainWindow(QWidget *parent)
     Create_TrayIcon();
     //-----
 
+//    connect(mReminder, SIGNAL(reminder_timeout(QTime )), this,
+//            SLOT(mSysTrayIcon->showMessage("提示","欢迎使用",QSystemTrayIcon::Information,1000);));
 
 
-
+    on_pushButton_4_clicked();
 }
 
 MainWindow::~MainWindow()
 {
+
     delete ui;
 }
 
@@ -110,7 +116,6 @@ void MainWindow::on_pushButton_4_clicked()
 {
 
     this->hide();
-
     mSysTrayIcon->show();
 
 
@@ -118,10 +123,14 @@ void MainWindow::on_pushButton_4_clicked()
 void MainWindow::on_activatedSysTrayIcon(QSystemTrayIcon::ActivationReason reason){
     switch (reason) {
     case QSystemTrayIcon::Trigger:
-           TrayIconFlash();
-        //this->show();
-        //mSysTrayIcon->showMessage("提示","欢迎使用",QSystemTrayIcon::Information,1000);
+        sub_show->hide();
+        sub_show->show();
         break;
+//    case QSystemTrayIcon::Trigger:
+//           TrayIconFlash();
+//        //this->show();
+//        mSysTrayIcon->showMessage("提示","欢迎使用",QSystemTrayIcon::Information,1000);
+//        break;
     case QSystemTrayIcon::DoubleClick:
         this->show();
         break;

@@ -1,6 +1,7 @@
 #ifndef TIPCAP_H
 #define TIPCAP_H
 
+//显示对话气泡的。
 #include <QWidget>
 #include "stable.h"
 namespace Ui {

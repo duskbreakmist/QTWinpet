@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+//主控制窗口
 #include <QMainWindow>
 #include "processlist.h"
 #include "wininfo.h"
@@ -9,6 +9,7 @@
 #include <qsystemtrayicon.h>
 
 #include "character.h"
+#include "reminder.h"
 
 #define MaxCharacterNum 20
 QT_BEGIN_NAMESPACE
@@ -93,6 +94,7 @@ private:
     QAction *mShowMainAction;
     QAction *mExitAction;
     QTimer *mTimer;
+
 
     bool Iconflash;
     bool IfFlash;

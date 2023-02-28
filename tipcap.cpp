@@ -6,7 +6,7 @@ tipcap::tipcap(QWidget *parent) :
     ui(new Ui::tipcap)
 {
     ui->setupUi(this);
-    setWindowFlag(Qt::Tool);
+    //setWindowFlag(Qt::Tool);
 
 
     mytimer = new QTimer(this);
@@ -21,6 +21,7 @@ tipcap::tipcap(QWidget *parent) :
     soundeffect = new QSoundEffect;
     soundeffect->setVolume(0.25);
 
+    this->hide();
 //    connect(soundeffect,SIGNAL(QSoundEffect::stop()),this,SLOT(WindowHide()));
 }
 

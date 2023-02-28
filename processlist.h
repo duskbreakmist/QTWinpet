@@ -1,6 +1,6 @@
 #ifndef PROCESSLIST_H
 #define PROCESSLIST_H
-
+//进程列表显示
 #include <QWidget>
 #include "stable.h"
 namespace Ui {

@@ -19,6 +19,7 @@
 #include <QProcess>
 #include <QDesktopServices>
 #include <QListWidgetItem>
+#include <QList>
 //#include <QtGlobal>
 #include <qdir.h>
 #endif // STABLE_H

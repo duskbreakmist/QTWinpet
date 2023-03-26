@@ -10,7 +10,7 @@
 
 #include "character.h"
 #include "reminder.h"
-
+#include "workclock.h"
 #define MaxCharacterNum 20
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -81,6 +81,7 @@ private:
     Ui::MainWindow *ui;
     processlist* sub1;
     wininfo * sub2;
+    workclock* nowclock;
     character * sub_show;//之后这个将成为诸多character的临时索引
     QListWidgetItem *NowItem;
 //    int NowItemIndex;

@@ -35,11 +35,11 @@ character::character(QWidget *parent) :
     mouse_clicked_R = false;
     IfPhy = true;
     m_g = QPointF(0,0.5);
-    ground_y = 574;
+    ground_y = 614;
     ActionMode = 1;
 
     resize(SCREENwidth,SCREENheight);//不再改变
-    StableP = QPoint(SCREENwidth/2,SCREENheight);
+    StableP = QPoint(SCREENwidth/2,SCREENheight-40);
     thisWinId = (HWND)winId();
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowFlag(Qt::FramelessWindowHint);
@@ -75,6 +75,7 @@ void character::UpdateFolder(QString nowfolder){
     actions[3].setImgDir(characterFolder+"/sit");
     actions[4].setImgDir(characterFolder+"/sleep");
     actions[5].setImgDir(characterFolder+"/special");
+    //actions[0].
     soundeffect->setSource(QUrl::fromLocalFile(characterFolder+"/sound/click.wav"));
     TipCaption->UpdateFolder(characterFolder+"/sound");
 }
@@ -248,7 +249,7 @@ void character::paintEvent(QPaintEvent* event){
                 if(rand()%2==1){
                     IfRLTurn = !IfRLTurn;
                 }
-                if(rand()%10==0){
+                if(true||rand()%10==0){
                     nowaction->reset(true);
                     actions[5].Ifloop = 1;//特殊动作只能重复一次
                     setAction(&actions[5]);//special

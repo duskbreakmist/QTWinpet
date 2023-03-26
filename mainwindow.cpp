@@ -41,6 +41,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     on_pushButton_4_clicked();
+
+    nowclock = new workclock;
+    nowclock->show();
 }
 
 MainWindow::~MainWindow()

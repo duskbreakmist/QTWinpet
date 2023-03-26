@@ -14,6 +14,7 @@ CONFIG += c++17
 SOURCES += \
     action.cpp \
     askanswer.cpp \
+    backgroundcontrol.cpp \
     character.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -21,11 +22,13 @@ SOURCES += \
     reminder.cpp \
     setting.cpp \
     tipcap.cpp \
-    wininfo.cpp
+    wininfo.cpp \
+    workclock.cpp
 
 HEADERS += \
     action.h \
     askanswer.h \
+    backgroundcontrol.h \
     character.h \
     mainwindow.h \
     processlist.h \
@@ -33,17 +36,20 @@ HEADERS += \
     setting.h \
     stable.h \
     tipcap.h \
-    wininfo.h
+    wininfo.h \
+    workclock.h
 
 FORMS += \
     askanswer.ui \
+    backgroundcontrol.ui \
     character.ui \
     mainwindow.ui \
     processlist.ui \
     reminder.ui \
     setting.ui \
     tipcap.ui \
-    wininfo.ui
+    wininfo.ui \
+    workclock.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

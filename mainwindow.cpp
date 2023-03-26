@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     CharacterNum = 0;
     sub1 = new processlist;
     sub2 = new wininfo;
+    sub3 = new backgroundcontrol;
     ui->textEdit->setText("./character/斯卡蒂皮肤");
 
     Create_character();
@@ -29,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->checkBox_3->setChecked(true);
     ui->stackedWidget->addWidget(sub1);
     ui->stackedWidget->addWidget(sub2);
+    ui->stackedWidget->addWidget(sub3);
     ui->stackedWidget->setCurrentWidget(sub1);
     ui->stackedWidget->setCurrentIndex(0);
 
@@ -48,7 +50,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+    delete sub1;
+    delete sub2;
+    delete sub3;
+    delete nowclock;
     delete ui;
 }
 
@@ -382,5 +387,22 @@ void MainWindow::on_pushButton_9_clicked()
 {
     //更改当前
     sub_show->UpdateFolder(CharacterFolder);
+}
+
+
+void MainWindow::on_pushButton_10_clicked()
+{
+    ui->stackedWidget->setCurrentWidget(sub3);
+}
+
+
+void MainWindow::on_checkBox_7_clicked(bool checked)
+{
+    if(checked){
+        nowclock->hide();
+    }
+    else{
+        nowclock->show();
+    }
 }
 

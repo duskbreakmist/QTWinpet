@@ -191,7 +191,7 @@ void workclock::paintEvent(QPaintEvent *event)
         }
         int radius = 100;
         QFont font = painter.font();
-        font.setBold(true);
+        //font.setBold(true);
         painter.setFont(font);
         int pointSize = font.pointSize();
 

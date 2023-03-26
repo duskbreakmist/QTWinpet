@@ -11,6 +11,7 @@
 #include "character.h"
 #include "reminder.h"
 #include "workclock.h"
+#include "backgroundcontrol.h"
 #define MaxCharacterNum 20
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -77,10 +78,15 @@ private slots:
 
     void on_pushButton_9_clicked();
 
+    void on_pushButton_10_clicked();
+
+    void on_checkBox_7_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
     processlist* sub1;
     wininfo * sub2;
+    backgroundcontrol * sub3;
     workclock* nowclock;
     character * sub_show;//之后这个将成为诸多character的临时索引
     QListWidgetItem *NowItem;

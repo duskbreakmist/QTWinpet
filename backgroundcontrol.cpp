@@ -283,7 +283,26 @@ void backgroundcontrol::on_checkBox_4_clicked(bool checked)
     }
 }
 
+bool backgroundcontrol::sendMessage(int key)
+{
+    if(hffplay==0){
+        return false;
+    }
+    qDebug()<<key;
+    DWORD dwVKFkeyData = 0;//lParam 参数值
+    WORD dwScanCode =MapVirtualKey(key,0);//获取回车虚拟按键VK_SPACE的键盘扫描码
+    dwVKFkeyData = 1;
+    dwVKFkeyData |= dwScanCode<<16;
+    //按下
+    ::PostMessage(hffplay,WM_KEYDOWN,key,dwVKFkeyData);
+    //弹起
+    dwVKFkeyData |= 1<<30;
+    ::PostMessage(hffplay,WM_KEYUP,key,dwVKFkeyData);
+    Sleep(50);
+    //qDebug()<<"end";
+    return true;
 
+}
 void backgroundcontrol::on_pushButton_9_clicked()
 {
     //暂停
@@ -300,20 +319,8 @@ void backgroundcontrol::on_pushButton_9_clicked()
         else{
             ui->pushButton_9->setText("暂停");
         }
-        DWORD dwVKFkeyData;//lParam 参数值
-        WORD dwScanCode =MapVirtualKey(VK_SPACE,0);//获取回车虚拟按键VK_SPACE的键盘扫描码
-        dwVKFkeyData = 1;
-        dwVKFkeyData |= dwScanCode<<16;
-        dwVKFkeyData |= 0<<24;
-        dwVKFkeyData |= 1<<29;
-        //按下
-        qDebug()<<"send";
-        ::PostMessage(hffplay,WM_KEYDOWN,VK_SPACE,dwVKFkeyData);
-        //弹起
-        dwVKFkeyData |= 3 << 30;
-        ::PostMessage(hffplay,WM_KEYUP,VK_SPACE,dwVKFkeyData);
-        Sleep(50);
-        qDebug()<<"end";
+        sendMessage(VK_SPACE);
+
     }
 }
 
@@ -321,42 +328,18 @@ void backgroundcontrol::on_pushButton_9_clicked()
 void backgroundcontrol::on_pushButton_11_clicked()
 {
     //回放
-    if(hffplay!=0){
-        DWORD dwVKFkeyData;//lParam 参数值
-        WORD dwScanCode =MapVirtualKey(VK_LEFT,0);
-        dwVKFkeyData = 1;
-        dwVKFkeyData |= dwScanCode<<16;
-        dwVKFkeyData |= 0<<24;
-        dwVKFkeyData |= 1<<29;
-        //按下
-        qDebug()<<"send";
-        ::PostMessage(hffplay,WM_KEYDOWN,VK_LEFT,dwVKFkeyData);
-        //弹起
-        dwVKFkeyData |= 3 << 30;
-        ::PostMessage(hffplay,WM_KEYUP,VK_LEFT,dwVKFkeyData);
-        Sleep(500);
-        qDebug()<<"end";
-    }
+
+    sendMessage(VK_LEFT);
+
 }
 
 
 void backgroundcontrol::on_pushButton_10_clicked()
 {
     //快进
-    if(hffplay!=0){
-        DWORD dwVKFkeyData;//lParam 参数值
-        WORD dwScanCode =MapVirtualKey(VK_RIGHT,0);
-        dwVKFkeyData = 1;
-        dwVKFkeyData |= dwScanCode<<16;
-        dwVKFkeyData |= 0<<24;
-        dwVKFkeyData |= 1<<29;
-        //按下
-        ::PostMessage(hffplay,WM_KEYDOWN,VK_RIGHT,dwVKFkeyData);
-        //弹起
-        dwVKFkeyData |= 3 << 30;
-        ::PostMessage(hffplay,WM_KEYUP,VK_RIGHT,dwVKFkeyData);
-        Sleep(50);
-    }
+
+    sendMessage(VK_RIGHT);
+
 }
 
 
@@ -366,5 +349,26 @@ void backgroundcontrol::on_pushButton_12_clicked()
     if(!file.isEmpty()){
         ui->lineEdit_3->setText(file);
     }
+}
+
+
+void backgroundcontrol::on_pushButton_13_clicked()
+{
+    //音量-
+    sendMessage(VK_UP);
+}
+
+
+void backgroundcontrol::on_pushButton_14_clicked()
+{
+    //静音
+    sendMessage(0x4D);
+}
+
+
+void backgroundcontrol::on_pushButton_15_clicked()
+{
+    //音量+
+    sendMessage(VK_RIGHT);
 }
 

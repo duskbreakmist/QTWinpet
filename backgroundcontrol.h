@@ -21,6 +21,8 @@ public:
     bool ifpaused;
 
     HWND hffplay;
+    bool sendMessage(int key);
+
     void createSubDesktop();
     void closeSubDesktop(bool t = true);
 
@@ -66,6 +68,12 @@ private slots:
     void on_pushButton_10_clicked();
 
     void on_pushButton_12_clicked();
+
+    void on_pushButton_13_clicked();
+
+    void on_pushButton_14_clicked();
+
+    void on_pushButton_15_clicked();
 
 private:
     Ui::backgroundcontrol *ui;

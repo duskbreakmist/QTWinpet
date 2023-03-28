@@ -21,13 +21,26 @@ backgroundcontrol::backgroundcontrol(QWidget *parent) :
     ffplayer = L"D:\\Programs\\FFmpeg\\ffmpeg20220620full\\bin\\ffplay.exe";
 
     ui->lineEdit->setText("C:/Users/ASUS/Desktop/test.mp4");
+    ui->lineEdit_2->setText("C:/Users/ASUS/Desktop/wallpaper/drawbymyself.png");
+    staticurl = "C:\\Users\\ASUS\\Desktop\\wallpaper";
     ifloop = true;
+    ifkeep = false;
+    ifmusic = true;
+    ifautoset = false;
+    initfile= "./Data/init.txt";
+
+    readinitfile();
+    if(ifautoset){//开机启动设置
+        on_pushButton_2_clicked();
+    }
+    //createSubDesktop();
 }
 
 backgroundcontrol::~backgroundcontrol()
 {
+    closeSubDesktop(!ifkeep);
+    qDebug()<<ifkeep;
     delete ui;
-    closeSubDesktop();
 }
 void backgroundcontrol::createSubDesktop(){
     if(hffplay!=0){
@@ -54,8 +67,9 @@ void backgroundcontrol::createSubDesktop(){
                 | WS_EX_TRANSPARENT);
         }
 }
-void backgroundcontrol::closeSubDesktop(){
-    if(hffplay!=0){
+void backgroundcontrol::closeSubDesktop(bool t){
+
+    if(t&&hffplay!=0){
         //DestroyWindow(hffplay);
         TerminateProcess(pi.hProcess, 0);
         CloseHandle(pi.hThread);
@@ -66,22 +80,46 @@ void backgroundcontrol::closeSubDesktop(){
         qDebug()<<"df";
     }
 }
+void backgroundcontrol::setstaticbk(){
+    QString temp = ui->lineEdit_2->text();
+    PVOID temp2;
+    temp.replace("/","\\");
+    qDebug()<<temp;
+    temp2 = (PVOID)(temp.toStdString().c_str());
+    qDebug()<<temp2;//这玩意会变！！！相同temp2有不同 的值。真奇怪而且好像不同值也可以正确读取
+    //const char* path = "C:\\Users\\ASUS\\Desktop\\wallpaper\\img0.jpg";
+//    SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (PVOID)path, SPIF_SENDCHANGE);
+    while(!SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, temp2, SPIF_SENDCHANGE||SPIF_UPDATEINIFILE)){
+        qDebug()<<temp2;
+    }
+}
+void backgroundcontrol::returnstaticbk(){
 
+}
 void backgroundcontrol::on_pushButton_2_clicked()
 {
     //set
     //记得留空格！！！
-    QString temp = " "+ui->lineEdit->text()+ " -noborder -x 1920 -y 1080";
+    QString temp = " "+ui->lineEdit->text()+ " -alwaysontop -noborder -x 1920 -y 1080";
     if(ifloop){
         temp += " -loop 0";
     }
     else{
         temp += " -loop 1";
     }
+    if(!ifmusic){
+        temp+= " -an";
+    }
     temp.replace("/","\\");
     qDebug()<<"get";
     qDebug()<<temp.toStdWString();
     lpParam = temp.toStdWString().c_str();
+
+    QString temp2 = ui->lineEdit_3->text();
+    temp2.replace("/","\\");
+    ffplayer = temp2.toStdWString().c_str();
+    qDebug()<<temp2.toStdWString();
+
     createSubDesktop();
 }
 
@@ -95,8 +133,238 @@ void backgroundcontrol::on_pushButton_3_clicked()
 
 void backgroundcontrol::on_pushButton_clicked()
 {
-    QString folder = QFileDialog::getOpenFileName(this, "选择目录");
+    QString file = QFileDialog::getOpenFileName(this, "选择视频等文件");
 //::getExistingDirectory(this, "选择目录", "./", QFileDialog::ShowDirsOnly);
-    ui->lineEdit->setText(folder);
+    if(!file.isEmpty()){
+        ui->lineEdit->setText(file);
+
+    }
+}
+
+
+void backgroundcontrol::on_checkBox_2_clicked(bool checked)
+{
+    if(checked){
+        ifkeep = true;
+    }
+    else{
+        ifkeep = false;
+    }
+}
+
+
+void backgroundcontrol::on_checkBox_3_clicked(bool checked)
+{
+    if(checked){
+        ifmusic = true;
+    }
+    else{
+        ifmusic = false;
+    }
+}
+
+
+void backgroundcontrol::on_pushButton_4_clicked()
+{
+    QString file = QFileDialog::getOpenFileName(this, "选择图片文件");
+    if(!file.isEmpty()){
+        ui->lineEdit_2->setText(file);
+
+    }
+}
+
+
+void backgroundcontrol::on_pushButton_5_clicked()
+{
+    //set pic
+    setstaticbk();
+}
+
+
+void backgroundcontrol::on_pushButton_6_clicked()
+{
+    //return pic
+    returnstaticbk();
+}
+
+
+void backgroundcontrol::on_pushButton_7_clicked()
+{
+    //save
+    QFile f(initfile);
+    QString textEdit_txt =
+            ui->lineEdit->text()
+            +"\n"+ui->lineEdit_2->text()
+            +"\n"+ui->lineEdit_3->text()
+            +"\n"+(ifautoset?"1":"0")
+            +"\n"+(ifmusic?"1":"0")
+            +"\n"+(ifkeep?"1":"0");
+    QByteArray log = textEdit_txt.toUtf8();
+//        QByteArray log = textEdit_txt.toLocal8Bit();
+    if(!f.open(QIODevice::WriteOnly)){
+        qDebug()<<"f open error,文件不存在";
+        f.open(QIODevice::WriteOnly);
+        f.write(log,log.length());
+        f.close();
+    }
+    else{
+        qDebug()<<"add success";
+        ui->label->setText("添加成功");
+        f.write(log,log.length());
+        f.close();
+    }
+}
+
+bool backgroundcontrol::readinitfile(){
+    //read
+    QFile f(initfile);
+    if(!f.open(QIODevice::ReadOnly)){
+        qDebug()<<"f open error,文件不存在";
+        f.close();
+        return false;
+    }
+    qDebug()<<"read success";
+    QTextStream * read = new QTextStream(&f);
+    QStringList Data = read->readAll().split("\n");
+    qDebug()<<Data.count();
+
+    if(Data.count()!=6){
+        qDebug()<<"文件损坏";
+        f.close();
+        return false;
+    }
+    //打印出每行的第一个单元格的数据
+    ui->lineEdit->setText(Data.at(0));
+    ui->lineEdit_2->setText(Data.at(1));
+    ui->lineEdit_3->setText(Data.at(2));//播放器地址
+    if(Data.at(3)=="0"){
+        ifautoset = 0;
+        ui->checkBox_4->setChecked(false);
+    }
+    else{
+        ifautoset = 1;
+        ui->checkBox_4->setChecked(true);
+    }
+    if(Data.at(4)=="0"){
+        ifmusic = 0;
+        ui->checkBox_3->setChecked(false);
+    }
+    else{
+        ifmusic = 1;
+        ui->checkBox_3->setChecked(true);
+    }
+    if(Data.at(5)=="0"){
+        ifkeep= 0;
+        ui->checkBox_2->setChecked(false);
+    }
+    else{
+        ifkeep = 1;
+        ui->checkBox_2->setChecked(true);
+    }
+
+
+    f.close();
+    return true;
+}
+
+void backgroundcontrol::on_pushButton_8_clicked()
+{
+    readinitfile();
+}
+
+
+void backgroundcontrol::on_checkBox_4_clicked(bool checked)
+{
+    if(checked){
+        ifautoset = true;
+    }
+    else{
+        ifautoset = false;
+    }
+}
+
+
+void backgroundcontrol::on_pushButton_9_clicked()
+{
+    //暂停
+//    qDebug()<<PostMessage(hffplay, WM_KEYDOWN, 0x20, 0);//发送‘H’到notepad
+//    qDebug()<<PostMessage(hffplay, WM_KEYUP, 0x20, 0);//发送‘H’到notepad
+//    qDebug()<<SendMessage (hffplay, WM_KEYDOWN, 0x20, 0);//发送‘H’到notepad
+//    qDebug()<<SendMessage (hffplay, WM_KEYUP, 0x20, 0);//发送‘H’到notepad
+
+    if(hffplay!=0){
+        ifpaused = !ifpaused;
+        if(ifpaused){
+            ui->pushButton_9->setText("已暂停");
+        }
+        else{
+            ui->pushButton_9->setText("暂停");
+        }
+        DWORD dwVKFkeyData;//lParam 参数值
+        WORD dwScanCode =MapVirtualKey(VK_SPACE,0);//获取回车虚拟按键VK_SPACE的键盘扫描码
+        dwVKFkeyData = 1;
+        dwVKFkeyData |= dwScanCode<<16;
+        dwVKFkeyData |= 0<<24;
+        dwVKFkeyData |= 1<<29;
+        //按下
+        qDebug()<<"send";
+        ::PostMessage(hffplay,WM_KEYDOWN,VK_SPACE,dwVKFkeyData);
+        //弹起
+        dwVKFkeyData |= 3 << 30;
+        ::PostMessage(hffplay,WM_KEYUP,VK_SPACE,dwVKFkeyData);
+        Sleep(50);
+        qDebug()<<"end";
+    }
+}
+
+
+void backgroundcontrol::on_pushButton_11_clicked()
+{
+    //回放
+    if(hffplay!=0){
+        DWORD dwVKFkeyData;//lParam 参数值
+        WORD dwScanCode =MapVirtualKey(VK_LEFT,0);
+        dwVKFkeyData = 1;
+        dwVKFkeyData |= dwScanCode<<16;
+        dwVKFkeyData |= 0<<24;
+        dwVKFkeyData |= 1<<29;
+        //按下
+        qDebug()<<"send";
+        ::PostMessage(hffplay,WM_KEYDOWN,VK_LEFT,dwVKFkeyData);
+        //弹起
+        dwVKFkeyData |= 3 << 30;
+        ::PostMessage(hffplay,WM_KEYUP,VK_LEFT,dwVKFkeyData);
+        Sleep(500);
+        qDebug()<<"end";
+    }
+}
+
+
+void backgroundcontrol::on_pushButton_10_clicked()
+{
+    //快进
+    if(hffplay!=0){
+        DWORD dwVKFkeyData;//lParam 参数值
+        WORD dwScanCode =MapVirtualKey(VK_RIGHT,0);
+        dwVKFkeyData = 1;
+        dwVKFkeyData |= dwScanCode<<16;
+        dwVKFkeyData |= 0<<24;
+        dwVKFkeyData |= 1<<29;
+        //按下
+        ::PostMessage(hffplay,WM_KEYDOWN,VK_RIGHT,dwVKFkeyData);
+        //弹起
+        dwVKFkeyData |= 3 << 30;
+        ::PostMessage(hffplay,WM_KEYUP,VK_RIGHT,dwVKFkeyData);
+        Sleep(50);
+    }
+}
+
+
+void backgroundcontrol::on_pushButton_12_clicked()
+{
+    QString file = QFileDialog::getOpenFileName(this, "选择exe文件");
+    if(!file.isEmpty()){
+        ui->lineEdit_3->setText(file);
+    }
 }
 

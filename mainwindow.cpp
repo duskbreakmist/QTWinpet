@@ -50,6 +50,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    sub1->~processlist();//记得！
+    sub2->~wininfo();
+    sub3->~backgroundcontrol();
     delete sub1;
     delete sub2;
     delete sub3;

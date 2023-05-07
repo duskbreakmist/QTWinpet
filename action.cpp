@@ -39,6 +39,7 @@ bool action::setImgDir(QString dir){
                 = tmpDir.entryInfoList
                 (QDir::Files|QDir::Dirs|QDir::NoDotAndDotDot,QDir::Name);
         if(listInfo.isEmpty()){
+            ImgNum = 0;
             qDebug()<<"图片文件夹为空或无法读取";
             return false;
         }
@@ -69,6 +70,7 @@ bool action::Paint(QPainter& p,QPoint ScreenStable,double Scale,bool IfRLturn){
             p.drawImage(QPointF(0,0),NowImg);
         }
         else{
+            //p.drawRect(QRectF(Show_LUp,ShowSize));
             if(IfRLturn){
                 //p.drawRect(QRectF(Show_LUp,ShowSize));
                 //p.drawImage(,)

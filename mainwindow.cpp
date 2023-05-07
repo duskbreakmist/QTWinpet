@@ -319,6 +319,7 @@ bool MainWindow::Create_character(){
     }
     QListWidgetItem *item = new QListWidgetItem;
     character* temp = new character;
+    temp->ControlWindow = this;
     item->setText(QString::number(CharacterNum));
     item->setData(Qt::UserRole,QVariant::fromValue((void *) temp));
     ui->listWidget->addItem(item);

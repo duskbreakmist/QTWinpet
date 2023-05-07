@@ -23,7 +23,7 @@ public:
     QStringList Captions;
     int CaptionNum;
 
-    bool setCaptionVoice(QPoint LUpoint);
+    bool setCaptionVoice(QPoint LUpoint,int i=0,QString message="");//指定第几条，或手动输入
     bool readCaption();
     void UpdateFolder(QString nowfolder);
 private slots:

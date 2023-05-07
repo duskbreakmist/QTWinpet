@@ -338,7 +338,7 @@ void backgroundcontrol::on_pushButton_10_clicked()
 {
     //快进
 
-    sendMessage(VK_RIGHT);
+    sendMessage(VK_VOLUME_DOWN);
 
 }
 

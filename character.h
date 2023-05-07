@@ -22,6 +22,8 @@ class character : public QWidget
 public:
     explicit character(QWidget *parent = nullptr);
     ~character();
+    QWidget* ControlWindow;
+
     void UpdateFolder(QString nowfolder);
     QString characterFolder;
     void change_state(int i);
@@ -49,6 +51,8 @@ public:
     char loopval;//为了分频而做
     void reset();
 
+
+
 private slots:
     bool Automove();
     //void AutoPicUpdate();
@@ -73,8 +77,12 @@ private:
     //QMediaPlayer *player;
     QSoundEffect* soundeffect;
 
-
-
+    double NextAngle;
+    int NextWidget;
+    QString WidgetTip[4] = {"显示主界面",
+                            "显示tool",
+                            "隐藏tool",
+                            "隐藏主界面"};
 protected:
     void mouseMoveEvent(QMouseEvent* event);
     void mouseReleaseEvent(QMouseEvent* event);

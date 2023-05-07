@@ -37,16 +37,27 @@ void tipcap::UpdateFolder(QString nowfolder){
     CaptionFile = nowfolder+"/CaptionFile.txt";
     readCaption();
 }
-bool tipcap::setCaptionVoice(QPoint LUpoint){
+bool tipcap::setCaptionVoice(QPoint LUpoint,int i,QString message){
     //this->move()
     LUpoint += QPoint(-50,-60);
     move(LUpoint);
     show();
+    if(i<0){//不会自动关闭
+        ui->textEdit->setText(message);
+        return true;
+    }
 
-    int temp = rand()%CaptionNum;
+    int temp=0;
+    if(i>0){
+        temp%=CaptionNum;
+         temp=i-1;
+    }
+    else{
+         temp= rand()%CaptionNum;
+    }
     ui->textEdit->setText(Captions.at(temp));
     ui->textEdit->setAlignment(Qt::AlignCenter);
-    mytimer->start(VoiceTime.at(temp).toInt());
+    mytimer->start(VoiceTime.at(temp).toInt());//倒计时结束自动关闭
 
     soundeffect->setSource(QUrl::fromLocalFile(VoiceFolder+"/"+VoicePath.at(temp)));
     soundeffect->play();

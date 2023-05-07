@@ -1,6 +1,6 @@
 #include "character.h"
 #include "ui_character.h"
-
+#include <math.h>
 character::character(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::character)
@@ -75,11 +75,12 @@ void character::UpdateFolder(QString nowfolder){
     actions[3].setImgDir(characterFolder+"/sit");
     actions[4].setImgDir(characterFolder+"/sleep");
     actions[5].setImgDir(characterFolder+"/special");
-    //actions[0].
+    actions[5].StableP.setY(245);
+
     soundeffect->setSource(QUrl::fromLocalFile(characterFolder+"/sound/click.wav"));
     TipCaption->UpdateFolder(characterFolder+"/sound");
 }
-void character::setAction(action* act){ 
+void character::setAction(action* act){
     AutoRisize(NowScale*act->ImgSize);
     nowaction = act;
 }
@@ -166,10 +167,32 @@ void character::mouseMoveEvent(QMouseEvent* event){
     if(mouse_clicked_R){
         mouse_moved_R = true;
         QPoint tPos = event->globalPosition().toPoint()-screenPos;
+        NextAngle = atan2(tPos.x(),tPos.y());
 //        qDebug()<<tPos
-//        if(tPos.x()>0){
-//            sub_ask->show();
-//        }
+        if(NextAngle>-0.785&&NextAngle<0.785){
+            //sub_ask->show();
+            //显示主界面
+            NextWidget = 0;
+        }
+        else if(NextAngle>0.785&&NextAngle<2.35){
+            NextWidget = 1;
+        }
+        else if(NextAngle>-2.35&&NextAngle<-0.785){
+            NextWidget = 2;
+        }
+        else if(NextAngle>2.35||NextAngle<-2.35){
+            //隐藏主界面
+            NextWidget = 3;
+        }
+        if(!tPos.isNull()){
+            TipCaption->setCaptionVoice(
+                    nowaction->Show_LUp+QPoint(13,-10),
+                        -1,
+                        WidgetTip[NextWidget]
+                     );
+
+            //sub_ask->show();
+        }
     }
 
 }
@@ -210,13 +233,25 @@ void character::mouseReleaseEvent(QMouseEvent* event){
             soundeffect->play();
         }
         else{
-            QPoint tPos = event->globalPosition().toPoint()-screenPos;
-            if(tPos.rx()>10){
+            //qDebug()<<NextAngle;
+            switch (NextWidget) {
+            case 0:
+                ControlWindow->show();
+                break;
+            case 1:
                 sub_ask->show();
+                break;
+            case 2:
+                sub_ask->hide();
+                break;
+            case 3:
+                ControlWindow->hide();
+                break;
+            default:
+                break;
             }
-            if(tPos.rx()<10){
-                sub_ask->show();
-            }
+            //NextAngle = 0;
+            TipCaption->hide();
         }
     }
     if(event->button()==Qt::LeftButton){
@@ -249,11 +284,14 @@ void character::paintEvent(QPaintEvent* event){
                 if(rand()%2==1){
                     IfRLTurn = !IfRLTurn;
                 }
-                if(true||rand()%10==0){
-                    nowaction->reset(true);
-                    actions[5].Ifloop = 1;//特殊动作只能重复一次
-                    setAction(&actions[5]);//special
-                }
+                if(actions[5].ImgNum!=0&&rand()%10==0){
+
+                        nowaction->reset(true);
+                        actions[5].Ifloop = 1;//特殊动作只能重复一次
+                        setAction(&actions[5]);//special
+
+                 }
+
                 else{
                     nowaction->reset(true);
                     setAction(&actions[1]);
